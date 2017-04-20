@@ -116,7 +116,8 @@ public final class TopologyStates {
                 }
                 TopologyActions topologyActions = context.getTopologyActions();
                 String mavenArtifacts = context.getMavenArtifacts();
-                topologyActions.deploy(CatalogToLayoutConverter.getTopologyLayout(topology, dag), mavenArtifacts, context);
+                topologyActions.deploy(CatalogToLayoutConverter.getTopologyLayout(topology, dag),
+                        mavenArtifacts, context, context.getAsUser());
                 context.setState(TOPOLOGY_STATE_DEPLOYED);
                 context.setCurrentAction("Topology deployed");
             } catch (Exception ex) {
@@ -140,7 +141,7 @@ public final class TopologyStates {
                 context.setCurrentAction("Suspending topology");
                 Topology topology = context.getTopology();
                 TopologyActions topologyActions = context.getTopologyActions();
-                topologyActions.suspend(CatalogToLayoutConverter.getTopologyLayout(topology));
+                topologyActions.suspend(CatalogToLayoutConverter.getTopologyLayout(topology), context.getAsUser());
                 context.setState(TOPOLOGY_STATE_SUSPENDED);
                 context.setCurrentAction("Topology suspended");
             } catch (Exception ex) {
@@ -163,7 +164,7 @@ public final class TopologyStates {
                 context.setCurrentAction("Resuming topology");
                 Topology topology = context.getTopology();
                 TopologyActions topologyActions = context.getTopologyActions();
-                topologyActions.resume(CatalogToLayoutConverter.getTopologyLayout(topology));
+                topologyActions.resume(CatalogToLayoutConverter.getTopologyLayout(topology), context.getAsUser());
                 context.setState(TOPOLOGY_STATE_DEPLOYED);
                 context.setCurrentAction("Topology resumed");
             } catch (Exception ex) {
@@ -188,7 +189,7 @@ public final class TopologyStates {
             context.setCurrentAction("Killing topology");
             Topology topology = context.getTopology();
             TopologyActions topologyActions = context.getTopologyActions();
-            topologyActions.kill(CatalogToLayoutConverter.getTopologyLayout(topology));
+            topologyActions.kill(CatalogToLayoutConverter.getTopologyLayout(topology), context.getAsUser());
             context.setState(TOPOLOGY_STATE_INITIAL);
             context.setCurrentAction("Topology killed");
         } catch (Exception ex) {

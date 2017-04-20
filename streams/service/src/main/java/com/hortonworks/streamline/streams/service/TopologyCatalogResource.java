@@ -137,7 +137,8 @@ public class TopologyCatalogResource {
                     ascending = DEFAULT_SORT_ORDER_ASCENDING;
                 }
 
-                List<TopologyDetailedResponse> detailedTopologies = enrichTopologies(topologies, sortType, ascending,
+                String asUser = WSUtils.getUserFromSecurityContext(securityContext);
+                List<TopologyDetailedResponse> detailedTopologies = enrichTopologies(topologies, asUser, sortType, ascending,
                         latencyTopN);
                 response = WSUtils.respondEntities(detailedTopologies, OK);
             }
@@ -156,9 +157,10 @@ public class TopologyCatalogResource {
                                     @javax.ws.rs.QueryParam("latencyTopN") Integer latencyTopN,
                                     @Context SecurityContext securityContext) {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ);
+        String asUser = WSUtils.getUserFromSecurityContext(securityContext);
         Response response = getTopologyByIdAndVersionId(topologyId,
                 catalogService.getCurrentVersionId(topologyId),
-                detail, latencyTopN);
+                detail, latencyTopN, asUser);
         if (response != null) {
             return response;
         }
@@ -175,7 +177,8 @@ public class TopologyCatalogResource {
                                               @javax.ws.rs.QueryParam("latencyTopN") Integer latencyTopN,
                                               @Context SecurityContext securityContext) {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ);
-        Response response = getTopologyByIdAndVersionId(topologyId, versionId, detail, latencyTopN);
+        String asUser = WSUtils.getUserFromSecurityContext(securityContext);
+        Response response = getTopologyByIdAndVersionId(topologyId, versionId, detail, latencyTopN, asUser);
         if (response != null) {
             return response;
         }
@@ -184,13 +187,13 @@ public class TopologyCatalogResource {
     }
 
     private Response getTopologyByIdAndVersionId(Long topologyId, Long versionId, Boolean detail,
-                                                 Integer latencyTopN) {
+                                                 Integer latencyTopN, String asUser) {
         Topology result = catalogService.getTopology(topologyId, versionId);
         if (result != null) {
             if (detail == null || !detail) {
                 return WSUtils.respondEntity(result, OK);
             } else {
-                TopologyDetailedResponse topologyDetailed = enrichTopology(result, latencyTopN);
+                TopologyDetailedResponse topologyDetailed = enrichTopology(result, asUser, latencyTopN);
                 return WSUtils.respondEntity(topologyDetailed, OK);
             }
         }
@@ -389,7 +392,8 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology result = catalogService.getTopology(topologyId);
         if (result != null) {
-            TopologyActions.Status status = actionsService.topologyStatus(result);
+            String asUser = WSUtils.getUserFromSecurityContext(securityContext);
+            TopologyActions.Status status = actionsService.topologyStatus(result, asUser);
             return WSUtils.respondEntity(status, OK);
         }
 
@@ -405,7 +409,8 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology result = catalogService.getTopology(topologyId, versionId);
         if (result != null) {
-            TopologyActions.Status status = actionsService.topologyStatus(result);
+            String asUser = WSUtils.getUserFromSecurityContext(securityContext);
+            TopologyActions.Status status = actionsService.topologyStatus(result, asUser);
             return WSUtils.respondEntity(status, OK);
         }
 
@@ -448,7 +453,7 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology topology = catalogService.getTopology(topologyId);
         if (topology != null) {
-            return deploy(topology);
+            return deploy(topology, securityContext);
         }
         throw EntityNotFoundException.byId(topologyId.toString());
     }
@@ -463,14 +468,15 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology topology = catalogService.getTopology(topologyId, versionId);
         if (topology != null) {
-            return deploy(topology);
+            return deploy(topology, securityContext);
         }
         throw EntityNotFoundException.byVersion(topologyId.toString(), versionId.toString());
     }
 
-    private Response deploy(Topology topology) {
+    private Response deploy(Topology topology, SecurityContext securityContext) {
+        String asUser = securityContext.isSecure() ? securityContext.getUserPrincipal().getName() : null;
         try {
-            ParallelStreamUtil.runAsync(() -> actionsService.deployTopology(topology), forkJoinPool);
+            ParallelStreamUtil.runAsync(() -> actionsService.deployTopology(topology, asUser), forkJoinPool);
             return WSUtils.respondEntity(topology, OK);
         } catch (TopologyAlreadyExistsOnCluster ex) {
             return ex.getResponse();
@@ -484,7 +490,7 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology result = catalogService.getTopology(topologyId);
         if (result != null) {
-            actionsService.killTopology(result);
+            actionsService.killTopology(result, WSUtils.getUserFromSecurityContext(securityContext));
             return WSUtils.respondEntity(result, OK);
         }
 
@@ -500,7 +506,7 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology result = catalogService.getTopology(topologyId, versionId);
         if (result != null) {
-            actionsService.killTopology(result);
+            actionsService.killTopology(result, WSUtils.getUserFromSecurityContext(securityContext));
             return WSUtils.respondEntity(result, OK);
         }
 
@@ -514,7 +520,7 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology result = catalogService.getTopology(topologyId);
         if (result != null) {
-            actionsService.suspendTopology(result);
+            actionsService.suspendTopology(result, WSUtils.getUserFromSecurityContext(securityContext));
             return WSUtils.respondEntity(result, OK);
         }
 
@@ -530,7 +536,7 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology result = catalogService.getTopology(topologyId, versionId);
         if (result != null) {
-            actionsService.suspendTopology(result);
+            actionsService.suspendTopology(result, WSUtils.getUserFromSecurityContext(securityContext));
             return WSUtils.respondEntity(result, OK);
         }
 
@@ -545,7 +551,7 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology result = catalogService.getTopology(topologyId);
         if (result != null) {
-            actionsService.resumeTopology(result);
+            actionsService.resumeTopology(result, WSUtils.getUserFromSecurityContext(securityContext));
             return WSUtils.respondEntity(result, OK);
         }
 
@@ -561,7 +567,7 @@ public class TopologyCatalogResource {
         SecurityUtil.checkPermissions(authorizer, securityContext, NAMESPACE, topologyId, READ, EXECUTE);
         Topology result = catalogService.getTopology(topologyId, versionId);
         if (result != null) {
-            actionsService.resumeTopology(result);
+            actionsService.resumeTopology(result, WSUtils.getUserFromSecurityContext(securityContext));
             return WSUtils.respondEntity(result, OK);
         }
 
@@ -630,14 +636,14 @@ public class TopologyCatalogResource {
         return WSUtils.respondEntity(importedTopology, OK);
     }
 
-    private List<TopologyDetailedResponse> enrichTopologies(Collection<Topology> topologies, String sortType, Boolean ascending, Integer latencyTopN) {
+    private List<TopologyDetailedResponse> enrichTopologies(Collection<Topology> topologies, String asUser, String sortType, Boolean ascending, Integer latencyTopN) {
         LOG.debug("[START] enrichTopologies");
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         try {
             List<TopologyDetailedResponse> responses = ParallelStreamUtil.execute(() ->
                     topologies.parallelStream()
-                            .map(t -> enrichTopology(t, latencyTopN))
+                            .map(t -> enrichTopology(t, asUser, latencyTopN))
                             .sorted((c1, c2) -> {
                                 int compared;
 
@@ -667,7 +673,7 @@ public class TopologyCatalogResource {
         }
     }
 
-    private TopologyDetailedResponse enrichTopology(Topology topology, Integer latencyTopN) {
+    private TopologyDetailedResponse enrichTopology(Topology topology, String asUser, Integer latencyTopN) {
         LOG.debug("[START] enrichTopology - topology id: {}", topology.getId());
         Stopwatch stopwatch = Stopwatch.createStarted();
 
@@ -685,9 +691,9 @@ public class TopologyCatalogResource {
             }
 
             try {
-                String runtimeTopologyId = actionsService.getRuntimeTopologyId(topology);
-                TopologyMetrics.TopologyMetric topologyMetric = metricsService.getTopologyMetric(topology);
-                List<Pair<String, Double>> latenciesTopN = metricsService.getTopNAndOtherComponentsLatency(topology, latencyTopN);
+                String runtimeTopologyId = actionsService.getRuntimeTopologyId(topology, asUser);
+                TopologyMetrics.TopologyMetric topologyMetric = metricsService.getTopologyMetric(topology, asUser);
+                List<Pair<String, Double>> latenciesTopN = metricsService.getTopNAndOtherComponentsLatency(topology, asUser, latencyTopN);
 
                 detailedResponse = new TopologyDetailedResponse(topology, TopologyRunningStatus.RUNNING, namespaceName);
                 detailedResponse.setRuntime(new TopologyRuntimeResponse(runtimeTopologyId, topologyMetric, latenciesTopN));
