@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response>
+    <lst name="responseHeader">
+        <int name="status">0</int>
+        <int name="QTime">11</int>
+        <lst name="params">
+            <str name="q">*:*</str>
+            <str name="indent">on</str>
+            <str name="start">50</str>
+            <str name="json"/>
+            <str name="fq">type:storm_worker</str>
+            <str name="sort">logtime asc</str>
+            <str name="rows">50</str>
+            <str name="wt">xml</str>
+        </lst>
+    </lst>
+    <result name="response" numFound="603" start="50">
+        <doc>
+            <str name="cluster">streamline</str>
+            <str name="level">INFO</str>
+            <long name="event_count">1</long>
+            <str name="ip">172.17.0.2</str>
+            <str name="type">storm_worker</str>
+            <long name="seq_num">236</long>
+            <str name="path">/logs/streamline-1-TestAgg-3-1508734414-worker-6700.log</str>
+            <str name="ws_streamline_topology_id">1</str>
+            <str name="ws_streamline_topology_name">TestAgg</str>
+            <str name="thread_name">main</str>
+            <str name="host">f40896476263</str>
+            <str name="log_message">Timeouts disabled for executor __acker:[5 5]</str>
+            <str name="logger_name">o.a.s.d.executor</str>
+            <str name="id">44680b5c-0da9-4c1b-9dae-677709399e13</str>
+            <str name="message_md5">-8116364137778888133</str>
+            <date name="logtime">2017-10-31T07:12:04.628Z</date>
+            <str name="event_md5">1508766831648-539420697534635665</str>
+            <int name="logfile_line_number">51</int>
+            <str name="_ttl_">+7DAYS</str>
+            <date name="_expire_at_">2017-11-07T07:12:07.337Z</date>
+            <long name="_version_">1582756190168809472</long>
+        </doc>
+        <doc>
+            <str name="cluster">streamline</str>
+            <str name="level">DEBUG</str>
+            <long name="event_count">1</long>
+            <str name="ip">172.17.0.2</str>
+            <str name="type">storm_worker</str>
+            <long name="seq_num">239</long>
+            <str name="path">/logs/streamline-1-TestAgg-3-1508734414-worker-6700.log</str>
+            <str name="ws_streamline_topology_id">1</str>
+            <str name="ws_streamline_topology_name">TestAgg</str>
+            <str name="thread_name">main</str>
+            <str name="host">f40896476263</str>
+            <str name="log_message">Started with log levels: {"" #object[org.apache.logging.log4j.Level 0x5df63359 "INFO"], "STDERR" #object[org.apache.logging.log4j.Level 0x5df63359 "INFO"], "STDOUT" #object[org.apache.logging.log4j.Level 0x5df63359 "INFO"], "org.apache.storm.metric.LoggingMetricsConsumer" #object[org.apache.logging.log4j.Level 0x5df63359 "INFO"]}</str>
+            <str name="logger_name">o.a.s.d.worker</str>
+            <str name="id">0189c922-611c-4faa-a66e-00eac06804f8</str>
+            <str name="message_md5">-8804980058354882420</str>
+            <date name="logtime">2017-10-31T07:12:04.63Z</date>
+            <str name="event_md5">1508766831666-4674803638171396765</str>
+            <int name="logfile_line_number">53</int>
+            <str name="_ttl_">+7DAYS</str>
+            <date name="_expire_at_">2017-11-07T07:12:07.337Z</date>
+            <long name="_version_">1582756190169858048</long>
+        </doc>
+        <doc>
+            <str name="cluster">streamline</str>
+            <str name="level">INFO</str>
+            <long name="event_count">1</long>
+            <str name="ip">172.17.0.2</str>
+            <str name="type">storm_worker</str>
+            <long name="seq_num">244</long>
+            <str name="path">/logs/streamline-1-TestAgg-3-1508734414-worker-6700.log</str>
+            <str name="ws_streamline_topology_id">1</str>
+            <str name="ws_streamline_topology_name">TestAgg</str>
+            <str name="thread_name">Thread-7-1-TRUCK_EVENTS-executor[1 1]</str>
+            <str name="ws_streamline_component_name">TRUCK_EVENTS</str>
+            <str name="host">f40896476263</str>
+            <str name="log_message">Opening spout 1-TRUCK_EVENTS:(1)</str>
+            <str name="logger_name">o.a.s.d.executor</str>
+            <str name="id">33fd1d78-9c03-4587-800c-71316489d444</str>
+            <str name="message_md5">2141568158062760766</str>
+            <date name="logtime">2017-10-31T07:12:04.633Z</date>
+            <str name="event_md5">1508766832354-9065529866868654499</str>
+            <int name="logfile_line_number">57</int>
+            <str name="_ttl_">+7DAYS</str>
+            <date name="_expire_at_">2017-11-07T07:12:07.337Z</date>
+            <long name="_version_">1582756190177198081</long>
+        </doc>
+        <doc>
+            <str name="cluster">streamline</str>
+            <str name="level">INFO</str>
+            <long name="event_count">1</long>
+            <str name="ip">172.17.0.2</str>
+            <str name="type">storm_worker</str>
+            <long name="seq_num">246</long>
+            <str name="path">/logs/streamline-1-TestAgg-3-1508734414-worker-6700.log</str>
+            <str name="ws_streamline_topology_id">1</str>
+            <str name="ws_streamline_topology_name">TestAgg</str>
+            <str name="thread_name">Thread-7-1-TRUCK_EVENTS-executor[1 1]</str>
+            <str name="ws_streamline_component_name">TRUCK_EVENTS</str>
+            <str name="host">f40896476263</str>
+            <str name="log_message">Kafka Spout opened with the following configuration: KafkaSpoutConfig{kafkaProps={key.deserializer=org.apache.kafka.common.serialization.ByteArrayDeserializer, ssl.protocol=TLS, value.deserializer=org.apache.kafka.common.serialization.ByteBufferDeserializer, max.poll.records=500, group.id=truck_events, max.partition.fetch.bytes=1048576, bootstrap.servers=localhost:9092, ssl.truststore.type=JKS, security.protocol=PLAINTEXT, ssl.keystore.type=JKS, ssl.trustmanager.algorithm=PKIX, enable.auto.commit=false, ssl.keymanager.algorithm=SunX509, fetch.min.bytes=1}, key=null, value=null, pollTimeoutMs=200, offsetCommitPeriodMs=30000, maxUncommittedOffsets=10000000, firstPollOffsetStrategy=UNCOMMITTED_EARLIEST, subscription=org.apache.storm.kafka.spout.NamedSubscription@130c4c9c, translator=com.hortonworks.streamline.streams.runtime.storm.spout.AvroKafkaSpoutTranslator@5cb2497d, retryService=KafkaSpoutRetryExponentialBackoff{delay=TimeInterval{length=0, timeUnit=MILLISECONDS}, ratio=TimeInterval{length=2, timeUnit=MILLISECONDS}, maxRetries=2147483647, maxRetryDelay=TimeInterval{length=10000, timeUnit=MILLISECONDS}}}</str>
+            <str name="logger_name">o.a.s.k.s.KafkaSpout</str>
+            <str name="id">ed914b61-0332-474e-9202-90ccb9276e67</str>
+            <str name="message_md5">-5520153765141145090</str>
+            <date name="logtime">2017-10-31T07:12:04.634Z</date>
+            <str name="event_md5">1508766832358-8283701973367110374</str>
+            <int name="logfile_line_number">58</int>
+            <str name="_ttl_">+7DAYS</str>
+            <date name="_expire_at_">2017-11-07T07:12:07.337Z</date>
+            <long name="_version_">1582756190179295232</long>
+        </doc>
+        <doc>
+            <str name="cluster">streamline</str>
+            <str name="level">INFO</str>
+            <long name="event_count">1</long>
+            <str name="ip">172.17.0.2</str>
+            <str name="type">storm_worker</str>
+            <long name="seq_num">254</long>
+            <str name="path">/logs/streamline-1-TestAgg-3-1508734414-worker-6700.log</str>
+            <str name="ws_streamline_topology_id">1</str>
+            <str name="ws_streamline_topology_name">TestAgg</str>
+            <str name="thread_name">Thread-9-__system-executor[-1 -1]</str>
+            <str name="host">f40896476263</str>
+            <str name="log_message">Preparing bolt __system:(-1)</str>
+            <str name="logger_name">o.a.s.d.executor</str>
+            <str name="id">ae949f8e-3228-430b-b1e3-9ca08369d5b4</str>
+            <str name="message_md5">-6121521527290884899</str>
+            <date name="logtime">2017-10-31T07:12:04.636Z</date>
+            <str name="event_md5">1508766832364418213173749825102</str>
+            <int name="logfile_line_number">61</int>
+            <str name="_ttl_">+7DAYS</str>
+            <date name="_expire_at_">2017-11-07T07:12:07.337Z</date>
+            <long name="_version_">1582756190187683840</long>
+        </doc>
+    </result>
+</response>

@@ -70,24 +70,29 @@ public class LogSearchCriteria {
             this.to = to;
         }
 
-        public void setComponentName(String componentName) {
+        public Builder setComponentName(String componentName) {
             this.componentName = componentName;
+            return this;
         }
 
-        public void setLogLevel(String logLevel) {
+        public Builder setLogLevel(String logLevel) {
             this.logLevel = logLevel;
+            return this;
         }
 
-        public void setSearchString(String searchString) {
+        public Builder setSearchString(String searchString) {
             this.searchString = searchString;
+            return this;
         }
 
-        public void setStart(Integer start) {
+        public Builder setStart(Integer start) {
             this.start = start;
+            return this;
         }
 
-        public void setLimit(Integer limit) {
+        public Builder setLimit(Integer limit) {
             this.limit = limit;
+            return this;
         }
 
         public LogSearchCriteria build() {

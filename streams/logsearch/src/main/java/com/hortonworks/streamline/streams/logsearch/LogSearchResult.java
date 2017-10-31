@@ -9,7 +9,7 @@ public class LogSearchResult {
     // TODO: long? String?
     private long timestamp;
 
-    private LogSearchResult(String appId, String componentName, String logLevel,
+    public LogSearchResult(String appId, String componentName, String logLevel,
                             String logMessage, long timestamp) {
         this.appId = appId;
         this.componentName = componentName;
