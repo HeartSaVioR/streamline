@@ -33,6 +33,8 @@ import com.hortonworks.streamline.streams.catalog.service.StreamCatalogService;
 import com.hortonworks.streamline.streams.catalog.topology.TopologyData;
 import com.hortonworks.streamline.streams.cluster.service.EnvironmentService;
 import com.hortonworks.streamline.streams.exception.TopologyNotAliveException;
+import com.hortonworks.streamline.streams.logsearch.LogSearchCriteria;
+import com.hortonworks.streamline.streams.logsearch.topology.service.TopologyLogSearchService;
 import com.hortonworks.streamline.streams.metrics.topology.service.TopologyMetricsService;
 import com.hortonworks.streamline.streams.security.Permission;
 import com.hortonworks.streamline.streams.security.Roles;
@@ -101,15 +103,17 @@ public class TopologyCatalogResource {
     private final EnvironmentService environmentService;
     private final TopologyActionsService actionsService;
     private final TopologyMetricsService metricsService;
+    private final TopologyLogSearchService logSearchService;
 
     public TopologyCatalogResource(StreamlineAuthorizer authorizer, StreamCatalogService catalogService,
                                    EnvironmentService environmentService, TopologyActionsService actionsService,
-                                   TopologyMetricsService metricsService) {
+                                   TopologyMetricsService metricsService, TopologyLogSearchService logSearchService) {
         this.authorizer = authorizer;
         this.catalogService = catalogService;
         this.environmentService = environmentService;
         this.actionsService = actionsService;
         this.metricsService = metricsService;
+        this.logSearchService = logSearchService;
     }
 
     @GET
@@ -694,6 +698,39 @@ public class TopologyCatalogResource {
         if (topology != null) {
             return WSUtils.respondEntity(catalogService.getComponentsToReconfigure(topology), OK);
         }
+        throw EntityNotFoundException.byId(topologyId.toString());
+    }
+
+    @GET
+    @Path("/topologies/{topologyId}/logs")
+    @Timed
+    public Response searchTopologyLogs(@PathParam("topologyId") Long topologyId,
+        @QueryParam("componentName") String componentName,
+        @QueryParam("logLevel") String logLevel,
+        @QueryParam("searchString") String searchString,
+        @QueryParam("from") Long from,
+        @QueryParam("to") Long to,
+        @QueryParam("start") Integer start,
+        @QueryParam("limit") Integer limit,
+        @Context SecurityContext securityContext) {
+
+        SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_USER,
+            NAMESPACE, topologyId, READ);
+        Topology topology = catalogService.getTopology(topologyId);
+        if (topology != null) {
+            if (from == null) {
+                throw BadRequestException.missingParameter("from");
+            }
+            if (to == null) {
+                throw BadRequestException.missingParameter("to");
+            }
+
+            LogSearchCriteria criteria = new LogSearchCriteria(String.valueOf(topologyId),
+                componentName, logLevel, searchString, from, to, start, limit);
+
+            return WSUtils.respondEntities(logSearchService.search(topology, criteria), OK);
+        }
+
         throw EntityNotFoundException.byId(topologyId.toString());
     }
 

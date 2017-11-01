@@ -35,6 +35,7 @@ import com.hortonworks.streamline.streams.cluster.resource.ServiceBundleResource
 import com.hortonworks.streamline.streams.cluster.resource.ServiceCatalogResource;
 import com.hortonworks.streamline.streams.cluster.resource.ServiceConfigurationCatalogResource;
 import com.hortonworks.streamline.streams.cluster.service.EnvironmentService;
+import com.hortonworks.streamline.streams.logsearch.topology.service.TopologyLogSearchService;
 import com.hortonworks.streamline.streams.metrics.topology.service.TopologyMetricsService;
 import com.hortonworks.streamline.streams.notification.service.NotificationServiceImpl;
 import com.hortonworks.streamline.streams.security.StreamlineAuthorizer;
@@ -80,6 +81,7 @@ public class StreamsModule implements ModuleRegistration, StorageManagerAware {
         final TopologyActionsService topologyActionsService = new TopologyActionsService(streamcatalogService,
                 environmentService, fileStorage, modelRegistryClient, config, subject);
         final TopologyMetricsService topologyMetricsService = new TopologyMetricsService(environmentService, subject);
+        final TopologyLogSearchService topologyLogSearchService = new TopologyLogSearchService(environmentService, subject);
 
         environmentService.addNamespaceAwareContainer(topologyActionsService);
         environmentService.addNamespaceAwareContainer(topologyMetricsService);
@@ -97,7 +99,7 @@ public class StreamsModule implements ModuleRegistration, StorageManagerAware {
         result.addAll(getClusterRelatedResources(authorizer, environmentService));
         result.add(new FileCatalogResource(authorizer, catalogService));
         result.addAll(getTopologyRelatedResources(authorizer, streamcatalogService, environmentService, topologyActionsService,
-                topologyMetricsService, securityCatalogService, subject));
+                topologyMetricsService, topologyLogSearchService, securityCatalogService, subject));
         result.add(new UDFCatalogResource(authorizer, streamcatalogService, fileStorage));
         result.addAll(getNotificationsRelatedResources(authorizer, streamcatalogService));
         result.add(new SchemaResource(createSchemaRegistryClient()));
@@ -130,10 +132,12 @@ public class StreamsModule implements ModuleRegistration, StorageManagerAware {
                                                      EnvironmentService environmentService,
                                                      TopologyActionsService actionsService,
                                                      TopologyMetricsService metricsService,
+                                                     TopologyLogSearchService logSearchService,
                                                      SecurityCatalogService securityCatalogService,
                                                      Subject subject) {
         return Arrays.asList(
-                new TopologyCatalogResource(authorizer, streamcatalogService, environmentService, actionsService, metricsService),
+                new TopologyCatalogResource(authorizer, streamcatalogService, environmentService,
+                    actionsService, metricsService, logSearchService),
                 new TopologyComponentBundleResource(authorizer, streamcatalogService, environmentService, subject),
                 new TopologyStreamCatalogResource(authorizer, streamcatalogService),
                 new TopologyEditorMetadataResource(authorizer, streamcatalogService),
