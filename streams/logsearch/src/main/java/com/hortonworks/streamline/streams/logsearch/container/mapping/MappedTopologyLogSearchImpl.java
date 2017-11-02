@@ -16,8 +16,7 @@
 package com.hortonworks.streamline.streams.logsearch.container.mapping;
 
 public enum MappedTopologyLogSearchImpl {
-    // FIXME: change the classname after implement it!
-    STORM_AMBARI_INFRA("com.hortonworks.streamline.streams.metrics.storm.ambari.AmbariMetricsServiceWithStormQuerier");
+    STORM_AMBARI_INFRA("com.hortonworks.streamline.streams.logsearch.storm.ambari.AmbariInfraWithStormLogSearch");
 
     private final String className;
 
@@ -29,7 +28,7 @@ public enum MappedTopologyLogSearchImpl {
         return className;
     }
 
-    public static String getName(String streamingEngine, String timeSeriesDB) {
-        return streamingEngine + "_" + timeSeriesDB;
+    public static String getName(String streamingEngine, String logSearchService) {
+        return streamingEngine + "_" + logSearchService;
     }
 }

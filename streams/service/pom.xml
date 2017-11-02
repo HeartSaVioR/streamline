@@ -42,6 +42,10 @@
         </dependency>
         <dependency>
             <groupId>com.hortonworks.streamline</groupId>
+            <artifactId>streamline-logsearch-storm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.hortonworks.streamline</groupId>
             <artifactId>streamline-notification</artifactId>
         </dependency>
         <dependency>

@@ -33,10 +33,12 @@ public class TopologyLogSearchContainer extends NamespaceAwareContainer<Topology
         MappedTopologyLogSearchImpl topologyLogSearchImpl;
         TopologyLogSearch topologyLogSearch;
 
+        String streamingEngine = namespace.getStreamingEngine();
         String logSearchService = namespace.getLogSearchService();
         if (logSearchService != null && !logSearchService.isEmpty()) {
+            String key = MappedTopologyLogSearchImpl.getName(streamingEngine, logSearchService);
             try {
-                topologyLogSearchImpl = MappedTopologyLogSearchImpl.valueOf(logSearchService);
+                topologyLogSearchImpl = MappedTopologyLogSearchImpl.valueOf(key);
             } catch (IllegalArgumentException e) {
                 throw new RuntimeException("Unsupported log search service: " + logSearchService, e);
             }
