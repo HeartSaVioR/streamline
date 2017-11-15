@@ -697,6 +697,45 @@ public class TopologyCatalogResource {
         throw EntityNotFoundException.byId(topologyId.toString());
     }
 
+    @POST
+    @Path("/topologies/{topologyId}/logconfig")
+    @Timed
+    public Response configureLogLevel(@PathParam("topologyId") Long topologyId,
+                                      @QueryParam("targetLogLevel") TopologyActions.LogLevel targetLogLevel,
+                                      @QueryParam("durationSecs") int durationSecs,
+                                      @Context SecurityContext securityContext) throws Exception {
+        SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_USER,
+                NAMESPACE, topologyId, READ);
+
+        Topology topology = catalogService.getTopology(topologyId);
+        if (topology != null) {
+            TopologyActions.LogLevelInformation logInfo = actionsService.configureLogLevel(topology, targetLogLevel,
+                    durationSecs, WSUtils.getUserFromSecurityContext(securityContext));
+            return WSUtils.respondEntity(logInfo, OK);
+        }
+        throw EntityNotFoundException.byId(topologyId.toString());
+    }
+
+    @GET
+    @Path("/topologies/{topologyId}/logconfig")
+    @Timed
+    public Response getLogLevel(@PathParam("topologyId") Long topologyId,
+                                @Context SecurityContext securityContext) throws Exception {
+        SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_USER,
+                NAMESPACE, topologyId, READ);
+
+        Topology topology = catalogService.getTopology(topologyId);
+        if (topology != null) {
+            TopologyActions.LogLevelInformation logInfo = actionsService.getLogLevel(topology, WSUtils.getUserFromSecurityContext(securityContext));
+            if (logInfo == null) {
+                return WSUtils.respondEntity(Collections.emptyMap(), OK);
+            } else {
+                return WSUtils.respondEntity(logInfo, OK);
+            }
+        }
+        throw EntityNotFoundException.byId(topologyId.toString());
+    }
+
     private List<CatalogResourceUtil.TopologyDetailedResponse> enrichTopologies(Collection<Topology> topologies, String asUser, String sortType, Boolean ascending, Integer latencyTopN) {
         LOG.debug("[START] enrichTopologies");
         Stopwatch stopwatch = Stopwatch.createStarted();
