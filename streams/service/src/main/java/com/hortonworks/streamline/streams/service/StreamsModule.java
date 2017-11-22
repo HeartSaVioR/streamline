@@ -133,6 +133,7 @@ public class StreamsModule implements ModuleRegistration, StorageManagerAware, T
                                                      Subject subject) {
         return Arrays.asList(
                 new TopologyCatalogResource(authorizer, streamcatalogService, environmentService, actionsService, metricsService, transactionManager),
+                new TopologyViewModeResource(authorizer, streamcatalogService, metricsService),
                 new TopologyComponentBundleResource(authorizer, streamcatalogService, environmentService, subject),
                 new TopologyStreamCatalogResource(authorizer, streamcatalogService),
                 new TopologyEditorMetadataResource(authorizer, streamcatalogService),
