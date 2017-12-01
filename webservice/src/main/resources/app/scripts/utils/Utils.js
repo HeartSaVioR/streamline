@@ -190,9 +190,29 @@ const kFormatter = function(num) {
   num = (!num)
     ? 0
     : num;
-  return num > 999
+  return num > 999 || num < -999
     ? (num / 1000).toFixed(1) + 'k'
-    : num;
+    : num.toFixed(1);
+};
+
+const abbreviateNumber = function(value) {
+  var newValue = value || 0;var suffix = "";
+  if (newValue >= 1000 || newValue <= -1000) {
+    var suffixes = ["", "k", "m", "b","t"];
+    var suffixNum = Math.floor( (""+newValue).length/3 );
+    var shortValue = '';
+    for (var precision = 2; precision >= 1; precision--) {
+      shortValue = parseFloat( (suffixNum != 0 ? (newValue / Math.pow(1000,suffixNum) ) : newValue).toPrecision(precision));
+      var dotLessShortValue = (shortValue + '').replace(/[^a-zA-Z 0-9]+/g,'');
+      if (dotLessShortValue.length <= 2) { break; }
+    }
+    if (shortValue % 1 != 0)  {shortValue = shortValue.toFixed(1);}
+    newValue = shortValue;
+    suffix = suffixes[suffixNum];
+  } else {
+    newValue = newValue.toFixed(1);
+  }
+  return {value: newValue, suffix: suffix};
 };
 
 const eventTimeData = function(inputFields) {
@@ -203,6 +223,11 @@ const eventTimeData = function(inputFields) {
   });
   eventTimeArr.push({fieldName: "processingTime", uiName: "processingTime"});
   return eventTimeArr;
+};
+
+// gets difference of minutes between two dates excluding the seconds
+const getTimeDiffInMinutes = function(end, start) {
+  return  moment.duration(end.diff(start, 'minutes')).asMinutes();
 };
 
 const inputFieldsData = function(inputFields) {
@@ -726,5 +751,7 @@ export default {
   matchStringInArr,
   populateSchemaVersionOptions,
   validateReconfigFlag,
-  noSpecialCharString
+  noSpecialCharString,
+  getTimeDiffInMinutes,
+  abbreviateNumber
 };
