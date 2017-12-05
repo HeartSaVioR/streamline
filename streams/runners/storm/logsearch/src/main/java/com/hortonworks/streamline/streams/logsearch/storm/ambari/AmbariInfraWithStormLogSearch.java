@@ -35,9 +35,9 @@ public class AmbariInfraWithStormLogSearch implements TopologyLogSearch {
     static final String COLLECTION_NAME = "collection";
     static final String SECURED_CLUSTER = "secured";
 
-    public static final String COLUMN_NAME_STREAMLINE_TOPOLOGY_ID = "streamline_topology_id";
-    public static final String COLUMN_NAME_STREAMLINE_COMPONENT_NAME = "streamline_component_name";
-    public static final String COLUMN_NAME_STORM_WORKER_PORT = "storm_worker_port";
+    public static final String COLUMN_NAME_STREAMLINE_TOPOLOGY_ID = "sdi_streamline_topology_id";
+    public static final String COLUMN_NAME_STREAMLINE_COMPONENT_NAME = "sdi_streamline_component_name";
+    public static final String COLUMN_NAME_STORM_WORKER_PORT = "sdi_storm_worker_port";
     public static final String COLUMN_NAME_HOST = "host";
     public static final String COLUMN_NAME_LOG_TIME = "logtime";
     public static final String COLUMN_NAME_LOG_LEVEL = "level";
