@@ -16,6 +16,8 @@ install: /bin/bash ./dev-tools/travis/travis-install.sh `pwd`
 script:
   - /bin/bash ./dev-tools/travis/travis-script.sh `pwd`
 sudo: required
+dist: trusty
+group: deprecated-2017Q4
 cache:
   directories:
     - "$HOME/.m2/repository"
