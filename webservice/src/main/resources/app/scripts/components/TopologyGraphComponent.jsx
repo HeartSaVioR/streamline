@@ -202,7 +202,7 @@ export default class TopologyGraphComponent extends Component {
     // component log actions
     this.logActions = svgG.append("foreignObject")
       .attr("class", "log-actions")
-      .attr("width", 286)
+      .attr("width", 500)
       .attr("height", 160)
       .style("display", "none")
       .attr('x', function(d){return 0;})
@@ -298,7 +298,7 @@ export default class TopologyGraphComponent extends Component {
     this.renderFlag = true;
     this.evt = document.createEvent("Events");
     this.evt.initEvent("click", true, true);
-    this.eventTable = false;
+    this.viewModeNodeClickFlag = false;
   }
 
   zoomAction(zoomType) {
@@ -476,6 +476,7 @@ export default class TopologyGraphComponent extends Component {
     let {internalFlags} = this;
     d3.event.stopPropagation();
     internalFlags.mouseDownNode = d;
+    this.viewModeNodeClickFlag = true;
   }
 
   // mouseup on node in view mode
@@ -486,6 +487,7 @@ export default class TopologyGraphComponent extends Component {
       this.props.compSelectCallback(d.nodeId, d);
     } else {
       this.props.compSelectCallback('', null);
+      this.viewModeNodeClickFlag = false;
     }
   }
 
@@ -594,6 +596,7 @@ export default class TopologyGraphComponent extends Component {
       this.main_edgestream.style('display', 'none');
     }
     state.showSpotlightSearch = false;
+    this.viewModeNodeClickFlag = false;
   }
 
   // mouseup on main svg
@@ -1162,13 +1165,13 @@ export default class TopologyGraphComponent extends Component {
         render(<TopologyComponentMetrics topologyId={thisGraph.topologyId} compData={data[0]} viewModeData={thisGraph.props.viewModeData} startDate={thisGraph.props.startDate} endDate={thisGraph.props.endDate} />, compMetrics.node());
       });
 
+      let allComponentLevelAction='',selectedNodeId='';
       //component log actions
-      if(internalFlags.selectedNode) {
+      if(internalFlags.selectedNode && this.viewModeNodeClickFlag) {
         const x = internalFlags.selectedNode.x;
         const y = internalFlags.selectedNode.y;
         let selectedMode = thisGraph.props.viewModeData.selectedMode;
         // NOTE- Uncommenting the line below will show sampling box
-        /*
         this.logActions.attr('x', x - 50)
           .attr('y', function(){
             if(selectedMode === 'Overview' || selectedMode === 'Sample'){
@@ -1178,14 +1181,15 @@ export default class TopologyGraphComponent extends Component {
             }
           })
           .style("display", "block");
-        */
+        selectedNodeId = internalFlags.selectedNode.nodeId ;
+        allComponentLevelAction = thisGraph.props.viewModeData.componentLevelActionDetails;
       } else {
         this.logActions
           .attr('x', 0)
           .attr('y', 0)
           .style("display", "none");
       }
-      render(<ComponentLogActions />, this.logActions.node());
+      render(<ComponentLogActions topologyId={thisGraph.topologyId} viewModeContextRouter={thisGraph.props.viewModeContextRouter}  componentLevelAction={thisGraph.props.componentLevelAction} selectedNodeId={selectedNodeId} allComponentLevelAction={allComponentLevelAction}/>, this.logActions.node());
     }
     //RHS Circle
     newGs.append("circle").attr("cx", function(d) {
