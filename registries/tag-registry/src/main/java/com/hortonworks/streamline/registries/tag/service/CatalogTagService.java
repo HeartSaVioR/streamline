@@ -92,7 +92,7 @@ public class CatalogTagService implements TagService {
     }
 
     @Override
-    public Tag addOrUpdateTag(Long tagId, Tag tag) {
+    public Tag updateTag(Long tagId, Tag tag) {
         if (tag.getId() == null) {
             tag.setId(tagId);
         }
@@ -104,7 +104,7 @@ public class CatalogTagService implements TagService {
         List<Tag> tagsToBeAdded = getTagsToBeAdded(existingTags, tag.getTags());
         List<Tag> tagsToBeRemoved = getTagsToBeRemoved(existingTags, tag.getTags());
         checkCycles(tag, tagsToBeAdded);
-        this.dao.addOrUpdate(tag);
+        this.dao.update(tag);
         updateTags(getTaggedEntity(tag), tagsToBeAdded, tagsToBeRemoved);
         return tag;
     }
@@ -157,7 +157,7 @@ public class CatalogTagService implements TagService {
     }
 
     @Override
-    public void addOrUpdateTagsForStorable(TaggedEntity taggedEntity, List<Tag> tags) {
+    public void updateTagsForStorable(TaggedEntity taggedEntity, List<Tag> tags) {
         List<Tag> existingTags = getTags(taggedEntity);
         updateTags(taggedEntity, getTagsToBeAdded(existingTags, tags), getTagsToBeRemoved(existingTags, tags));
     }

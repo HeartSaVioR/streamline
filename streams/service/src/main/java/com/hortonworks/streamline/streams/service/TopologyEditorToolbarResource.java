@@ -17,7 +17,6 @@ package com.hortonworks.streamline.streams.service;
 
 import com.codahale.metrics.annotation.Timed;
 import com.hortonworks.streamline.common.exception.service.exception.request.EntityNotFoundException;
-import com.hortonworks.streamline.common.exception.service.exception.request.WebserviceAuthorizationException;
 import com.hortonworks.streamline.common.util.WSUtils;
 import com.hortonworks.streamline.streams.catalog.TopologyEditorToolbar;
 import com.hortonworks.streamline.streams.catalog.service.StreamCatalogService;
@@ -133,14 +132,14 @@ public class TopologyEditorToolbarResource {
     @PUT
     @Path("/system/topologyeditortoolbar")
     @Timed
-    public Response addOrUpdateTopologyEditorToolbar(TopologyEditorToolbar toolbar, @Context SecurityContext securityContext) {
+    public Response updateTopologyEditorToolbar(TopologyEditorToolbar toolbar, @Context SecurityContext securityContext) {
         Long userId = getUserId(securityContext);
         if (!userId.equals(toolbar.getUserId())) {
             throw new IllegalArgumentException("User id in the security context: '" + userId + "' does not match user id " +
                     "in the request: '" + toolbar.getUserId() + "'");
         }
         SecurityUtil.checkPermissions(authorizer, securityContext, TopologyEditorToolbar.NAMESPACE, userId, WRITE);
-        TopologyEditorToolbar updated = catalogService.addOrUpdateTopologyEditorToolbar(toolbar);
+        TopologyEditorToolbar updated = catalogService.updateTopologyEditorToolbar(toolbar);
         return WSUtils.respondEntity(updated, OK);
     }
 

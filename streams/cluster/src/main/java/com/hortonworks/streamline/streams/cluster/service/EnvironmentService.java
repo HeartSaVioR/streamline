@@ -185,14 +185,14 @@ public class EnvironmentService {
         return dao.remove(new StorableKey(CLUSTER_NAMESPACE, cluster.getPrimaryKey()));
     }
 
-    public Cluster addOrUpdateCluster(Long clusterId, Cluster cluster) {
+    public Cluster updateCluster(Long clusterId, Cluster cluster) {
         if (cluster.getId() == null) {
             cluster.setId(clusterId);
         }
         if (cluster.getTimestamp() == null) {
             cluster.setTimestamp(System.currentTimeMillis());
         }
-        this.dao.addOrUpdate(cluster);
+        this.dao.update(cluster);
         return cluster;
     }
 
@@ -248,17 +248,17 @@ public class EnvironmentService {
         return dao.remove(new StorableKey(SERVICE_NAMESPACE, service.getPrimaryKey()));
     }
 
-    public Service addOrUpdateService(Long clusterId, Service service) {
-        return addOrUpdateService(clusterId, service.getId(), service);
+    public Service updateService(Long clusterId, Service service) {
+        return updateService(clusterId, service.getId(), service);
     }
 
-    public Service addOrUpdateService(Long clusterId, Long componentId, Service service) {
+    public Service updateService(Long clusterId, Long componentId, Service service) {
         service.setClusterId(clusterId);
         service.setId(componentId);
         if (service.getTimestamp() == null) {
             service.setTimestamp(System.currentTimeMillis());
         }
-        this.dao.addOrUpdate(service);
+        this.dao.update(service);
         return service;
     }
 
@@ -310,17 +310,17 @@ public class EnvironmentService {
         return dao.remove(new StorableKey(COMPONENT_NAMESPACE, component.getPrimaryKey()));
     }
 
-    public Component addOrUpdateComponent(Long serviceId, Component component) {
-        return addOrUpdateComponent(serviceId, component.getId(), component);
+    public Component updateComponent(Long serviceId, Component component) {
+        return updateComponent(serviceId, component.getId(), component);
     }
 
-    public Component addOrUpdateComponent(Long serviceId, Long componentId, Component component) {
+    public Component updateComponent(Long serviceId, Long componentId, Component component) {
         component.setServiceId(serviceId);
         component.setId(componentId);
         if (component.getTimestamp() == null) {
             component.setTimestamp(System.currentTimeMillis());
         }
-        this.dao.addOrUpdate(component);
+        this.dao.update(component);
         return component;
     }
 
@@ -404,19 +404,19 @@ public class EnvironmentService {
         return serviceConfiguration;
     }
 
-    public ServiceConfiguration addOrUpdateServiceConfiguration(Long serviceId,
-                                                                ServiceConfiguration serviceConfiguration) {
-        return addOrUpdateServiceConfiguration(serviceId, serviceConfiguration.getId(), serviceConfiguration);
+    public ServiceConfiguration updateServiceConfiguration(Long serviceId,
+                                                           ServiceConfiguration serviceConfiguration) {
+        return updateServiceConfiguration(serviceId, serviceConfiguration.getId(), serviceConfiguration);
     }
 
-    public ServiceConfiguration addOrUpdateServiceConfiguration(Long serviceId, Long serviceConfigurationId,
-                                                                ServiceConfiguration serviceConfiguration) {
+    public ServiceConfiguration updateServiceConfiguration(Long serviceId, Long serviceConfigurationId,
+                                                           ServiceConfiguration serviceConfiguration) {
         serviceConfiguration.setServiceId(serviceId);
         serviceConfiguration.setId(serviceConfigurationId);
         if (serviceConfiguration.getTimestamp() == null) {
             serviceConfiguration.setTimestamp(System.currentTimeMillis());
         }
-        this.dao.addOrUpdate(serviceConfiguration);
+        this.dao.update(serviceConfiguration);
         return serviceConfiguration;
     }
 
@@ -467,7 +467,7 @@ public class EnvironmentService {
         return ret;
     }
 
-    public Namespace addOrUpdateNamespace(Long namespaceId, Namespace namespace) {
+    public Namespace updateNamespace(Long namespaceId, Namespace namespace) {
         if (namespace.getId() == null) {
             namespace.setId(namespaceId);
         }
@@ -475,7 +475,7 @@ public class EnvironmentService {
         if (namespace.getTimestamp() == null) {
             namespace.setTimestamp(System.currentTimeMillis());
         }
-        this.dao.addOrUpdate(namespace);
+        this.dao.update(namespace);
         return namespace;
     }
 
@@ -509,11 +509,11 @@ public class EnvironmentService {
         return ret;
     }
 
-    public NamespaceServiceClusterMap addOrUpdateServiceClusterMapping(
+    public NamespaceServiceClusterMap addServiceClusterMapping(
             NamespaceServiceClusterMap newMapping) {
         assertEnvironmentIsNotInternal(newMapping.getNamespaceId());
 
-        this.dao.addOrUpdate(newMapping);
+        this.dao.add(newMapping);
         invalidateTopologyActionsMetricsInstances(newMapping.getNamespaceId());
         return newMapping;
     }

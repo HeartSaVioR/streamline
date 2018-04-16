@@ -45,7 +45,7 @@ public interface TagService {
      * @param tag   the tag
      * @return the added or updated tag
      */
-    Tag addOrUpdateTag(Long tagId, Tag tag);
+    Tag updateTag(Long tagId, Tag tag);
 
     /**
      * Returns the Tag associated with the given tag id.
@@ -101,7 +101,7 @@ public interface TagService {
      * @param entityId
      * @param tags
      */
-    void addOrUpdateTagsForStorable(TaggedEntity entityId, List<Tag> tags);
+    void updateTagsForStorable(TaggedEntity entityId, List<Tag> tags);
 
     /**
      *  Removes the given tags from the storable.

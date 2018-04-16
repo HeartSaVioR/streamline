@@ -282,12 +282,12 @@ public class TopologySourceCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}/sources/{id}")
     @Timed
-    public Response addOrUpdateTopologySource(@PathParam("topologyId") Long topologyId, @PathParam("id") Long sourceId,
-                                              TopologySource topologySource, @Context SecurityContext securityContext) {
+    public Response updateTopologySource(@PathParam("topologyId") Long topologyId, @PathParam("id") Long sourceId,
+                                         TopologySource topologySource, @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologySource createdTopologySource = catalogService.addOrUpdateTopologySource(topologyId, sourceId, topologySource);
-        return WSUtils.respondEntity(createdTopologySource, CREATED);
+        TopologySource updatedTopologySource = catalogService.updateTopologySource(topologyId, sourceId, topologySource);
+        return WSUtils.respondEntity(updatedTopologySource, CREATED);
     }
 
     /**

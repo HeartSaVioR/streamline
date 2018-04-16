@@ -93,8 +93,8 @@ public class DashboardCatalogResource {
     @PUT
     @Path("/{id}")
     @Timed
-    public Response addOrUpdateDashboard(@PathParam("id") Long dashboardId, Dashboard dashboard) {
-        Dashboard newDashboard = dashboardCatalogService.addOrUpdateDashboard(dashboardId, dashboard);
+    public Response updateDashboard(@PathParam("id") Long dashboardId, Dashboard dashboard) {
+        Dashboard newDashboard = dashboardCatalogService.updateDashboard(dashboardId, dashboard);
         return WSUtils.respondEntity(newDashboard, CREATED);
     }
 
@@ -157,10 +157,10 @@ public class DashboardCatalogResource {
     @PUT
     @Path("/{dashboardId}/widgets/{widgetId}")
     @Timed
-    public Response addOrUpdateWidget(@PathParam("dashboardId") Long dashboardId, @PathParam("widgetId") Long widgetId,
-                                      WidgetDto dto) {
+    public Response updateWidget(@PathParam("dashboardId") Long dashboardId, @PathParam("widgetId") Long widgetId,
+                                 WidgetDto dto) {
         Widget widget = Widget.fromDto(dto);
-        Widget updatedWidget = dashboardCatalogService.addOrUpdateWidget(dashboardId, widgetId, widget);
+        Widget updatedWidget = dashboardCatalogService.updateWidget(dashboardId, widgetId, widget);
         WidgetDto resultDto = WidgetDto.fromWidget(updatedWidget);
         if (dto.getDatasourceIds() != null) {
             Set<Long> existing = dashboardCatalogService.getWidgetDatasourceMapping(widget);
@@ -225,10 +225,10 @@ public class DashboardCatalogResource {
     @PUT
     @Path("/{dashboardId}/datasources/{datasourceId}")
     @Timed
-    public Response addOrUpdateDatasource(@PathParam("dashboardId") Long dashboardId,
-                                          @PathParam("datasourceId") Long datasourceId,
-                                          Datasource datasource) {
-        Datasource updatedDatasource = dashboardCatalogService.addOrUpdateDatasource(
+    public Response updateDatasource(@PathParam("dashboardId") Long dashboardId,
+                                     @PathParam("datasourceId") Long datasourceId,
+                                     Datasource datasource) {
+        Datasource updatedDatasource = dashboardCatalogService.updateDatasource(
                 dashboardId, datasourceId, datasource);
         return WSUtils.respondEntity(updatedDatasource, CREATED);
     }

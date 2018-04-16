@@ -325,9 +325,7 @@ public class RestIntegrationTest {
 
         Service service = createService(clusterId, 1L, "testService:"+1);
 
-        String serviceEntityUrl = serviceBaseUrl + "/" + 1;
-
-        client.target(serviceEntityUrl).request().put(Entity.json(service), Service.class);
+        client.target(serviceBaseUrl).request().post(Entity.json(service), Service.class);
 
         Long anotherClusterId = 2L;
 
@@ -335,7 +333,7 @@ public class RestIntegrationTest {
         String response = client.target(serviceBaseUrl).request().get(String.class);
         Assert.assertEquals(Collections.emptyList(), getEntities(response, Service.class));
 
-        serviceEntityUrl = serviceBaseUrl + "/" + 1;
+        String serviceEntityUrl = serviceBaseUrl + "/" + 1;
         try {
             client.target(serviceEntityUrl).request().get(String.class);
             Assert.fail("Should have thrown NotFoundException.");
@@ -366,9 +364,7 @@ public class RestIntegrationTest {
         String componentBaseUrl = rootUrl + String.format("services/%d/components", serviceId);
 
         Component component = createComponent(serviceId, 1L, "testComponent:"+1);
-
-        String componentEntityUrl = componentBaseUrl + "/" + 1;
-        client.target(componentEntityUrl).request().put(Entity.json(component), Component.class);
+        client.target(componentBaseUrl).request().post(Entity.json(component), Component.class);
 
         Long anotherClusterId = 2L;
         Long anotherServiceId = 2L;
@@ -377,7 +373,7 @@ public class RestIntegrationTest {
         String response = client.target(componentBaseUrl).request().get(String.class);
         Assert.assertEquals(Collections.emptyList(), getEntities(response, Component.class));
 
-        componentEntityUrl = componentBaseUrl + "/" + 1;
+        String componentEntityUrl = componentBaseUrl + "/" + 1;
         try {
             client.target(componentEntityUrl).request().get(String.class);
             Assert.fail("Should have thrown NotFoundException.");
@@ -568,9 +564,9 @@ public class RestIntegrationTest {
         InputStream updatedFileStream = new ByteArrayInputStream("andromeda-jar-contents".getBytes());
         multiPart.bodyPart(new StreamDataBodyPart("file", updatedFileStream, "file"));
         multiPart.bodyPart(new FormDataBodyPart("fileInfo", postedFile, MediaType.APPLICATION_JSON_TYPE));
-        File updatedFile = client.target(url)
+        File updatedFile = client.target(url + "/" + postedFile.getId())
                 .request(MediaType.MULTIPART_FORM_DATA_TYPE, MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(multiPart, multiPart.getMediaType()), File.class);
+                .put(Entity.entity(multiPart, multiPart.getMediaType()), File.class);
 
         Assert.assertEquals(updatedFile.getId(), postedFile.getId());
         Assert.assertEquals(updatedFile.getName(), postedFile.getName());

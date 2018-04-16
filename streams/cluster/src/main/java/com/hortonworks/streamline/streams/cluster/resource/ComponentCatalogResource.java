@@ -125,8 +125,8 @@ public class ComponentCatalogResource {
     @PUT
     @Path("/services/{serviceId}/components")
     @Timed
-    public Response addOrUpdateComponent(@PathParam("serviceId") Long serviceId, Component component,
-                                         @Context SecurityContext securityContext) {
+    public Response updateComponent(@PathParam("serviceId") Long serviceId, Component component,
+                                    @Context SecurityContext securityContext) {
         SecurityUtil.checkPermissions(authorizer, securityContext, Cluster.NAMESPACE, getClusterId(serviceId), WRITE);
         // overwrite service id to given path param
         component.setServiceId(serviceId);
@@ -136,7 +136,7 @@ public class ComponentCatalogResource {
             throw EntityNotFoundException.byId("service: " + serviceId.toString());
         }
 
-        Component createdComponent = environmentService.addOrUpdateComponent(serviceId, component);
+        Component createdComponent = environmentService.updateComponent(serviceId, component);
         return WSUtils.respondEntity(createdComponent, CREATED);
     }
 
@@ -158,14 +158,14 @@ public class ComponentCatalogResource {
     @PUT
     @Path("/services/{serviceId}/components/{id}")
     @Timed
-    public Response addOrUpdateComponent(@PathParam("serviceId") Long serviceId,
-                                         @PathParam("id") Long componentId, Component component,
-                                         @Context SecurityContext securityContext) {
+    public Response updateComponent(@PathParam("serviceId") Long serviceId,
+                                    @PathParam("id") Long componentId, Component component,
+                                    @Context SecurityContext securityContext) {
         SecurityUtil.checkPermissions(authorizer, securityContext, Cluster.NAMESPACE, getClusterId(serviceId), WRITE);
         // overwrite service id to given path param
         component.setServiceId(serviceId);
 
-        Component newComponent = environmentService.addOrUpdateComponent(serviceId, componentId, component);
+        Component newComponent = environmentService.updateComponent(serviceId, componentId, component);
         return WSUtils.respondEntity(newComponent, CREATED);
     }
 

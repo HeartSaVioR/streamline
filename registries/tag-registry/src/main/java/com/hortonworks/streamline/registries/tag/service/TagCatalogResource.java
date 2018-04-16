@@ -292,8 +292,8 @@ public class TagCatalogResource {
     @PUT
     @Path("/tags/{id}")
     @Timed
-    public Response addOrUpdateTag(@PathParam("id") Long tagId, TagDto tagDto) {
-        Tag newTag = tagService.addOrUpdateTag(tagId, makeTag(tagDto));
+    public Response updateTag(@PathParam("id") Long tagId, TagDto tagDto) {
+        Tag newTag = tagService.updateTag(tagId, makeTag(tagDto));
         return WSUtils.respondEntity(makeTagDto(newTag), OK);
     }
 

@@ -213,9 +213,9 @@ public class SecurityCatalogResource {
     @PUT
     @Path("/roles/{id}")
     @Timed
-    public Response addOrUpdateRole(@PathParam("id") Long roleId, Role role, @Context SecurityContext securityContext) {
+    public Response updateRole(@PathParam("id") Long roleId, Role role, @Context SecurityContext securityContext) {
         SecurityUtil.checkRole(authorizer, securityContext, ROLE_SECURITY_ADMIN);
-        Role newRole = catalogService.addOrUpdateRole(roleId, role);
+        Role newRole = catalogService.updateRole(roleId, role);
         return WSUtils.respondEntity(newRole, OK);
     }
 
@@ -298,8 +298,8 @@ public class SecurityCatalogResource {
     @PUT
     @Path("/roles/{parentRoleName}/children")
     @Timed
-    public Response addOrUpdateChildRoles(@PathParam("parentRoleName") String parentRoleName, Set<String> childRoleNames,
-                                          @Context SecurityContext securityContext) throws Exception {
+    public Response updateChildRoles(@PathParam("parentRoleName") String parentRoleName, Set<String> childRoleNames,
+                                     @Context SecurityContext securityContext) throws Exception {
         SecurityUtil.checkRole(authorizer, securityContext, ROLE_SECURITY_ADMIN);
         Long parentId = getIdFromRoleName(parentRoleName);
         Set<Long> currentChildIds = new HashSet<>();
@@ -431,9 +431,9 @@ public class SecurityCatalogResource {
     @PUT
     @Path("/users/{id}")
     @Timed
-    public Response addOrUpdateUser(@PathParam("id") Long userId, User user, @Context SecurityContext securityContext) {
+    public Response updateUser(@PathParam("id") Long userId, User user, @Context SecurityContext securityContext) {
         SecurityUtil.checkRole(authorizer, securityContext, ROLE_SECURITY_ADMIN);
-        User newUser = catalogService.addOrUpdateUser(userId, user);
+        User newUser = catalogService.updateUser(userId, user);
         return WSUtils.respondEntity(newUser, OK);
     }
 
@@ -504,10 +504,10 @@ public class SecurityCatalogResource {
     @PUT
     @Path("/acls/{id}")
     @Timed
-    public Response addOrUpdateAcl(@PathParam("id") Long aclId, AclEntry aclEntry, @Context SecurityContext securityContext) {
+    public Response updateAcl(@PathParam("id") Long aclId, AclEntry aclEntry, @Context SecurityContext securityContext) {
         mayBeFillSidId(aclEntry);
         checkAclOp(aclEntry, securityContext, this::shouldAllowAclAddOrUpdate);
-        AclEntry newAclEntry = catalogService.addOrUpdateAcl(aclId, aclEntry);
+        AclEntry newAclEntry = catalogService.updateAcl(aclId, aclEntry);
         return WSUtils.respondEntity(newAclEntry, OK);
     }
 

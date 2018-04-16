@@ -153,12 +153,12 @@ public class WindowCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}/windows/{id}")
     @Timed
-    public Response addOrUpdateWindow(@PathParam("topologyId") Long topologyId, @PathParam("id") Long ruleId,
-                                      TopologyWindow topologyWindow, @Context SecurityContext securityContext) throws Exception {
+    public Response updateWindow(@PathParam("topologyId") Long topologyId, @PathParam("id") Long ruleId,
+                                 TopologyWindow topologyWindow, @Context SecurityContext securityContext) throws Exception {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologyWindow createdTopologyWindow = catalogService.addOrUpdateWindow(topologyId, ruleId, topologyWindow);
-        return WSUtils.respondEntity(createdTopologyWindow, CREATED);
+        TopologyWindow createdTopologyWindow = catalogService.updateWindow(topologyId, ruleId, topologyWindow);
+        return WSUtils.respondEntity(createdTopologyWindow, OK);
     }
 
     @DELETE

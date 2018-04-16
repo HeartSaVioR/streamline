@@ -155,14 +155,14 @@ public class FileCatalogResource {
             oldFileStorageName = existingFile.getStoredFileName();
         }
 
-        final File updatedFile = addOrUpdateFile(fileId, inputStream, file);
+        final File updatedFile = updateFile(fileId, inputStream, file);
 
         if(oldFileStorageName != null) {
             final boolean deleted = catalogService.deleteFileFromStorage(oldFileStorageName);
             logDeletionMessage(oldFileStorageName, deleted);
         }
 
-        return WSUtils.respondEntity(updatedFile, CREATED);
+        return WSUtils.respondEntity(updatedFile, OK);
     }
 
     protected File addFile(InputStream inputStream, File file) {
@@ -170,9 +170,9 @@ public class FileCatalogResource {
         return catalogService.addFile(file);
     }
 
-    protected File addOrUpdateFile(Long fileId, InputStream inputStream, File file) {
+    protected File updateFile(Long fileId, InputStream inputStream, File file) {
         uploadFile(inputStream, file);
-        return catalogService.addOrUpdateFile(fileId, file);
+        return catalogService.updateFile(fileId, file);
     }
 
     private void uploadFile(InputStream inputStream, File file) {

@@ -135,11 +135,11 @@ public class TopologyEditorMetadataResource {
     @PUT
     @Path("/system/topologyeditormetadata/{id}")
     @Timed
-    public Response addOrUpdateTopologyEditorMetadata (@PathParam("id") Long topologyId, TopologyEditorMetadata topologyEditorMetadata,
-                                                       @Context SecurityContext securityContext) {
+    public Response updateTopologyEditorMetadata(@PathParam("id") Long topologyId, TopologyEditorMetadata topologyEditorMetadata,
+                                                 @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologyEditorMetadata newTopologyEditorMetadata = catalogService.addOrUpdateTopologyEditorMetadata(topologyId, topologyEditorMetadata);
+        TopologyEditorMetadata newTopologyEditorMetadata = catalogService.updateTopologyEditorMetadata(topologyId, topologyEditorMetadata);
         return WSUtils.respondEntity(newTopologyEditorMetadata, OK);
     }
 }

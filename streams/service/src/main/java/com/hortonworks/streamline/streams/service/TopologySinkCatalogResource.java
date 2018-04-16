@@ -263,11 +263,11 @@ public class TopologySinkCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}/sinks/{id}")
     @Timed
-    public Response addOrUpdateTopologySink(@PathParam("topologyId") Long topologyId, @PathParam("id") Long sinkId,
-                                            TopologySink topologySink, @Context SecurityContext securityContext) {
+    public Response updateTopologySink(@PathParam("topologyId") Long topologyId, @PathParam("id") Long sinkId,
+                                       TopologySink topologySink, @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologySink createdTopologySink = catalogService.addOrUpdateTopologySink(topologyId, sinkId, topologySink);
+        TopologySink createdTopologySink = catalogService.updateTopologySink(topologyId, sinkId, topologySink);
         return WSUtils.respondEntity(createdTopologySink, CREATED);
     }
 

@@ -123,8 +123,8 @@ public class ServiceConfigurationCatalogResource {
     @PUT
     @Path("/services/{serviceId}/configurations")
     @Timed
-    public Response addOrUpdateServiceConfiguration(@PathParam("serviceId") Long serviceId,
-        ServiceConfiguration serviceConfiguration, @Context SecurityContext securityContext) {
+    public Response updateServiceConfiguration(@PathParam("serviceId") Long serviceId,
+                                               ServiceConfiguration serviceConfiguration, @Context SecurityContext securityContext) {
         SecurityUtil.checkPermissions(authorizer, securityContext, Cluster.NAMESPACE, getClusterId(serviceId), WRITE);
         // overwrite service id to given path param
         serviceConfiguration.setServiceId(serviceId);
@@ -134,7 +134,7 @@ public class ServiceConfigurationCatalogResource {
             throw EntityNotFoundException.byId("service: " + serviceId.toString());
         }
 
-        ServiceConfiguration createdConfiguration = environmentService.addOrUpdateServiceConfiguration(serviceId,
+        ServiceConfiguration createdConfiguration = environmentService.updateServiceConfiguration(serviceId,
             serviceConfiguration);
         return WSUtils.respondEntity(createdConfiguration, CREATED);
     }
@@ -157,15 +157,15 @@ public class ServiceConfigurationCatalogResource {
     @PUT
     @Path("/services/{serviceId}/configurations/{id}")
     @Timed
-    public Response addOrUpdateServiceConfiguration(@PathParam("serviceId") Long serviceId,
-                                                    @PathParam("id") Long serviceConfigurationId,
-                                                    ServiceConfiguration serviceConfiguration,
-                                                    @Context SecurityContext securityContext) {
+    public Response updateServiceConfiguration(@PathParam("serviceId") Long serviceId,
+                                               @PathParam("id") Long serviceConfigurationId,
+                                               ServiceConfiguration serviceConfiguration,
+                                               @Context SecurityContext securityContext) {
         SecurityUtil.checkPermissions(authorizer, securityContext, Cluster.NAMESPACE, getClusterId(serviceId), WRITE);
         // overwrite service id to given path param
         serviceConfiguration.setServiceId(serviceId);
 
-        ServiceConfiguration newConfiguration = environmentService.addOrUpdateServiceConfiguration(serviceId,
+        ServiceConfiguration newConfiguration = environmentService.updateServiceConfiguration(serviceId,
             serviceConfigurationId, serviceConfiguration);
         return WSUtils.respondEntity(newConfiguration, CREATED);
     }

@@ -204,11 +204,11 @@ public class NotifierInfoCatalogResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/notifiers/{id}")
     @Timed
-    public Response addOrUpdateNotifierInfo(@PathParam("id") Long id,
-                                            @FormDataParam("notifierJarFile") final InputStream inputStream,
-                                            @FormDataParam("notifierJarFile") final FormDataContentDisposition contentDispositionHeader,
-                                            @FormDataParam("notifierConfig") final FormDataBodyPart notifierConfig,
-                                            @Context SecurityContext securityContext) throws IOException {
+    public Response updateNotifierInfo(@PathParam("id") Long id,
+                                       @FormDataParam("notifierJarFile") final InputStream inputStream,
+                                       @FormDataParam("notifierJarFile") final FormDataContentDisposition contentDispositionHeader,
+                                       @FormDataParam("notifierConfig") final FormDataBodyPart notifierConfig,
+                                       @Context SecurityContext securityContext) throws IOException {
         SecurityUtil.checkPermissions(authorizer, securityContext, Notifier.NAMESPACE, id, WRITE);
         MediaType mediaType = notifierConfig.getMediaType();
         LOG.debug("Media type {}", mediaType);
@@ -218,7 +218,7 @@ public class NotifierInfoCatalogResource {
         Notifier notifier = notifierConfig.getValueAs(Notifier.class);
         String jarFileName = uploadJar(inputStream, notifier.getName());
         notifier.setJarFileName(jarFileName);
-        Notifier newNotifier = catalogService.addOrUpdateNotifierInfo(id, notifier);
+        Notifier newNotifier = catalogService.updateNotifierInfo(id, notifier);
         return WSUtils.respondEntity(newNotifier, CREATED);
     }
 

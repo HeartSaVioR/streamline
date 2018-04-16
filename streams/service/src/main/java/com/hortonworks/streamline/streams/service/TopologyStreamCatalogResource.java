@@ -291,11 +291,11 @@ public class TopologyStreamCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}/streams/{id}")
     @Timed
-    public Response addOrUpdateStreamInfo(@PathParam("topologyId") Long topologyId, @PathParam("id") Long id,
-                                          TopologyStream topologyStream, @Context SecurityContext securityContext) {
+    public Response updateStreamInfo(@PathParam("topologyId") Long topologyId, @PathParam("id") Long id,
+                                     TopologyStream topologyStream, @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologyStream newTopologyStream = catalogService.addOrUpdateStreamInfo(topologyId, id, topologyStream);
+        TopologyStream newTopologyStream = catalogService.updateStreamInfo(topologyId, id, topologyStream);
         return WSUtils.respondEntity(newTopologyStream, OK);
     }
 

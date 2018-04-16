@@ -88,10 +88,10 @@ public class SecurityCatalogService {
         return role;
     }
 
-    public Role addOrUpdateRole(Long id, Role role) {
+    public Role updateRole(Long id, Role role) {
         role.setId(id);
         role.setTimestamp(System.currentTimeMillis());
-        this.dao.addOrUpdate(role);
+        this.dao.update(role);
         return role;
     }
 
@@ -177,11 +177,11 @@ public class SecurityCatalogService {
         return user;
     }
 
-    public User addOrUpdateUser(Long id, User user) {
+    public User updateUser(Long id, User user) {
         user.setId(id);
         user.setTimestamp(System.currentTimeMillis());
         validateUser(user);
-        this.dao.addOrUpdate(user);
+        this.dao.update(user);
         // update user - role association
         if (user.getRoles() != null) {
             List<QueryParam> qps = QueryParam.params(UserRole.USER_ID, String.valueOf(user.getId()));
@@ -311,11 +311,11 @@ public class SecurityCatalogService {
         return aclEntry;
     }
 
-    public AclEntry addOrUpdateAcl(Long id, AclEntry aclEntry) {
+    public AclEntry updateAcl(Long id, AclEntry aclEntry) {
         validateAcl(aclEntry);
         aclEntry.setId(id);
         aclEntry.setTimestamp(System.currentTimeMillis());
-        this.dao.addOrUpdate(aclEntry);
+        this.dao.update(aclEntry);
         return aclEntry;
     }
 

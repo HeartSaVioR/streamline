@@ -80,7 +80,7 @@ public final class MLModelRegistryService {
         return modelInfo;
     }
 
-    public MLModel addOrUpdateModelInfo(
+    public MLModel updateModelInfo(
             Long modelId, MLModel modelInfo,
             InputStream pmmlInputStream,
             String fileName) throws IOException, SAXException, JAXBException {
@@ -90,7 +90,7 @@ public final class MLModelRegistryService {
         modelInfo.setUploadedFileName(fileName);
 
         validateModelInfo(modelInfo);
-        this.storageManager.addOrUpdate(modelInfo);
+        this.storageManager.update(modelInfo);
         return modelInfo;
     }
 

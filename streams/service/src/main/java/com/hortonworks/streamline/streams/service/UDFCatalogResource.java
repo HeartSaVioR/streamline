@@ -278,12 +278,12 @@ public class UDFCatalogResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Path("/udfs/{id}")
     @Timed
-    public Response addOrUpdateUDF(@PathParam("id") Long udfId,
-                                   @FormDataParam("udfJarFile") final InputStream inputStream,
-                                   @FormDataParam("udfJarFile") final FormDataContentDisposition contentDispositionHeader,
-                                   @FormDataParam("udfConfig") final FormDataBodyPart udfConfig,
-                                   @FormDataParam("builtin") final boolean builtin,
-                                   @Context SecurityContext securityContext) throws Exception {
+    public Response updateUDF(@PathParam("id") Long udfId,
+                              @FormDataParam("udfJarFile") final InputStream inputStream,
+                              @FormDataParam("udfJarFile") final FormDataContentDisposition contentDispositionHeader,
+                              @FormDataParam("udfConfig") final FormDataBodyPart udfConfig,
+                              @FormDataParam("builtin") final boolean builtin,
+                              @Context SecurityContext securityContext) throws Exception {
         SecurityUtil.checkPermissions(authorizer, securityContext, UDF.NAMESPACE, udfId, WRITE);
         MediaType mediaType = udfConfig.getMediaType();
         LOG.debug("Media type {}", mediaType);
@@ -292,8 +292,8 @@ public class UDFCatalogResource {
         }
         UDF udf = udfConfig.getValueAs(UDF.class);
         processUdf(inputStream, udf, false, builtin);
-        UDF newUdf = catalogService.addOrUpdateUDF(udfId, udf);
-        return WSUtils.respondEntity(newUdf, CREATED);
+        UDF newUdf = catalogService.updateUDF(udfId, udf);
+        return WSUtils.respondEntity(newUdf, OK);
     }
 
     /**

@@ -228,7 +228,7 @@ public class TopologyTestRunner {
             history.finishWithFailures();
         }
 
-        catalogService.addOrUpdateTopologyTestRunHistory(history.getId(), history);
+        catalogService.updateTopologyTestRunHistory(history.getId(), history);
 
         return null;
     }

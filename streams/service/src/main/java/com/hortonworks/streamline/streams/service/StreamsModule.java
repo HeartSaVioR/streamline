@@ -237,7 +237,7 @@ public class StreamsModule implements ModuleRegistration, StorageManagerAware, T
                     testNamespace.setDescription("Empty environment to test the topology which doesn't require external service.");
                     testNamespace.setInternal(true);
                     testNamespace.setTimestamp(System.currentTimeMillis());
-                    environmentService.addOrUpdateNamespace(EnvironmentService.TEST_ENVIRONMENT_ID, testNamespace);
+                    environmentService.addNamespace(testNamespace);
                 }
             });
         } catch (Exception e) {
@@ -261,7 +261,7 @@ public class StreamsModule implements ModuleRegistration, StorageManagerAware, T
                     topologyVersion.setName("PLACEHOLDER_VERSIONINFO");
                     topologyVersion.setDescription("PLACEHOLDER_VERSIONINFO");
                     topologyVersion.setTimestamp(System.currentTimeMillis());
-                    catalogService.addOrUpdateTopologyVersionInfo(StreamCatalogService.PLACEHOLDER_ID, topologyVersion);
+                    catalogService.addTopologyVersionInfo(topologyVersion);
                 }
             });
         } catch (Exception e) {

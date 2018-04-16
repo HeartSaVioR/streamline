@@ -191,12 +191,12 @@ public class NamespaceCatalogResource {
   @PUT
   @Path("/namespaces/{id}")
   @Timed
-  public Response addOrUpdateNamespace(@PathParam("id") Long namespaceId,
-      Namespace namespace, @Context SecurityContext securityContext) {
+  public Response updateNamespace(@PathParam("id") Long namespaceId,
+                                  Namespace namespace, @Context SecurityContext securityContext) {
     SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_ENVIRONMENT_SUPER_ADMIN,
             Namespace.NAMESPACE, namespaceId, WRITE);
     try {
-      Namespace newNamespace = environmentService.addOrUpdateNamespace(namespaceId, namespace);
+      Namespace newNamespace = environmentService.updateNamespace(namespaceId, namespace);
       return WSUtils.respondEntity(newNamespace, OK);
     } catch (ProcessingException ex) {
       throw BadRequestException.of();
@@ -282,7 +282,7 @@ public class NamespaceCatalogResource {
     }
 
     List<NamespaceServiceClusterMap> newMappings = mappings.stream()
-            .map(environmentService::addOrUpdateServiceClusterMapping).collect(toList());
+            .map(environmentService::addServiceClusterMapping).collect(toList());
 
     return WSUtils.respondEntities(newMappings, CREATED);
   }
@@ -300,17 +300,20 @@ public class NamespaceCatalogResource {
     }
 
     Collection<NamespaceServiceClusterMap> existingMappings = environmentService.listServiceClusterMapping(namespaceId);
-    if (!existingMappings.contains(mapping)) {
-      existingMappings.add(mapping);
+    if (existingMappings.contains(mapping)) {
+      return WSUtils.respondEntity(mapping, CREATED);
     }
+
+    Collection<NamespaceServiceClusterMap> newMappings = new ArrayList<>(existingMappings);
+    newMappings.add(mapping);
 
     String streamingEngine = namespace.getStreamingEngine();
     String timeSeriesDB = namespace.getTimeSeriesDB();
 
-    assertServiceIsUnique(existingMappings, streamingEngine);
-    assertServiceIsUnique(existingMappings, timeSeriesDB);
+    assertServiceIsUnique(newMappings, streamingEngine);
+    assertServiceIsUnique(newMappings, timeSeriesDB);
 
-    NamespaceServiceClusterMap newMapping = environmentService.addOrUpdateServiceClusterMapping(mapping);
+    NamespaceServiceClusterMap newMapping = environmentService.addServiceClusterMapping(mapping);
     return WSUtils.respondEntity(newMapping, CREATED);
   }
 

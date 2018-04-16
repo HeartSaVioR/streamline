@@ -256,11 +256,11 @@ public class BranchRuleCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}/branchrules/{id}")
     @Timed
-    public Response addOrUpdateRule(@PathParam("topologyId") Long topologyId, @PathParam("id") Long ruleId,
-                                    TopologyBranchRule brRuleInfo, @Context SecurityContext securityContext) throws Exception {
+    public Response updateRule(@PathParam("topologyId") Long topologyId, @PathParam("id") Long ruleId,
+                               TopologyBranchRule brRuleInfo, @Context SecurityContext securityContext) throws Exception {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologyBranchRule createdRuleInfo = catalogService.addOrUpdateBranchRule(topologyId, ruleId, brRuleInfo);
+        TopologyBranchRule createdRuleInfo = catalogService.updateBranchRule(topologyId, ruleId, brRuleInfo);
         return WSUtils.respondEntity(createdRuleInfo, CREATED);
     }
 

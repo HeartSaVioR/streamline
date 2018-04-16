@@ -203,11 +203,11 @@ public class ClusterCatalogResource {
     @PUT
     @Path("/clusters/{id}")
     @Timed
-    public Response addOrUpdateCluster(@PathParam("id") Long clusterId,
-                                       Cluster cluster,
-                                       @Context SecurityContext securityContext) {
+    public Response updateCluster(@PathParam("id") Long clusterId,
+                                  Cluster cluster,
+                                  @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_SERVICE_POOL_SUPER_ADMIN, NAMESPACE, clusterId, WRITE);
-        Cluster newCluster = environmentService.addOrUpdateCluster(clusterId, cluster);
+        Cluster newCluster = environmentService.updateCluster(clusterId, cluster);
         return WSUtils.respondEntity(newCluster, CREATED);
     }
 

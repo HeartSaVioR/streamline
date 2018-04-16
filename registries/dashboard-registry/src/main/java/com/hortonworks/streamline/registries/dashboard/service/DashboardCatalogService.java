@@ -73,10 +73,10 @@ public class DashboardCatalogService {
         return dashboard;
     }
 
-    public Dashboard addOrUpdateDashboard(Long dashboardId, Dashboard dashboard) {
+    public Dashboard updateDashboard(Long dashboardId, Dashboard dashboard) {
         dashboard.setId(dashboardId);
         dashboard.setTimestamp(System.currentTimeMillis());
-        dao.addOrUpdate(dashboard);
+        dao.update(dashboard);
         return dashboard;
     }
 
@@ -140,12 +140,12 @@ public class DashboardCatalogService {
         return Collections.emptySet();
     }
 
-    public Widget addOrUpdateWidget(Long dashboardId, Long widgetId, Widget widget) {
+    public Widget updateWidget(Long dashboardId, Long widgetId, Widget widget) {
         ensureDashboardExists(dashboardId);
         widget.setId(widgetId);
         widget.setDashboardId(dashboardId);
         widget.setTimestamp(System.currentTimeMillis());
-        dao.addOrUpdate(widget);
+        dao.update(widget);
         return widget;
     }
 
@@ -188,12 +188,12 @@ public class DashboardCatalogService {
         return datasource;
     }
 
-    public Datasource addOrUpdateDatasource(Long dashboardId, Long datasourceId, Datasource datasource) {
+    public Datasource updateDatasource(Long dashboardId, Long datasourceId, Datasource datasource) {
         ensureDashboardExists(dashboardId);
         datasource.setId(datasourceId);
         datasource.setDashboardId(dashboardId);
         datasource.setTimestamp(System.currentTimeMillis());
-        dao.addOrUpdate(datasource);
+        dao.update(datasource);
         return datasource;
     }
 

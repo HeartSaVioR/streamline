@@ -51,7 +51,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -141,7 +140,7 @@ public class TopologyTestRunnerTest {
             // some fields are already modified after calling the method, so don't need to capture it
             catalogService.addTopologyTestRunHistory(withInstanceOf(TopologyTestRunHistory.class));
             times = 1;
-            catalogService.addOrUpdateTopologyTestRunHistory(anyLong, runHistory = withCapture());
+            catalogService.updateTopologyTestRunHistory(anyLong, runHistory = withCapture());
             times = 1;
 
             assertEquals(topology.getId(), runHistory.getTopologyId());
@@ -201,7 +200,7 @@ public class TopologyTestRunnerTest {
             // some fields are already modified after calling the method, so don't need to capture it
             catalogService.addTopologyTestRunHistory(withInstanceOf(TopologyTestRunHistory.class));
             times = 1;
-            catalogService.addOrUpdateTopologyTestRunHistory(anyLong, runHistory = withCapture());
+            catalogService.updateTopologyTestRunHistory(anyLong, runHistory = withCapture());
             times = 1;
 
             assertEquals(topology.getId(), runHistory.getTopologyId());
@@ -245,7 +244,7 @@ public class TopologyTestRunnerTest {
             // some fields are already modified after calling the method, so don't need to capture it
             catalogService.addTopologyTestRunHistory(withInstanceOf(TopologyTestRunHistory.class));
             times = 1;
-            catalogService.addOrUpdateTopologyTestRunHistory(anyLong, runHistory = withCapture());
+            catalogService.updateTopologyTestRunHistory(anyLong, runHistory = withCapture());
             times = 1;
 
             assertEquals(topology.getId(), runHistory.getTopologyId());
@@ -289,7 +288,7 @@ public class TopologyTestRunnerTest {
             // some fields are already modified after calling the method, so don't need to capture it
             catalogService.addTopologyTestRunHistory(withInstanceOf(TopologyTestRunHistory.class));
             times = 1;
-            catalogService.addOrUpdateTopologyTestRunHistory(anyLong, runHistory = withCapture());
+            catalogService.updateTopologyTestRunHistory(anyLong, runHistory = withCapture());
             times = 1;
 
             assertEquals(topology.getId(), runHistory.getTopologyId());
@@ -323,7 +322,7 @@ public class TopologyTestRunnerTest {
                 }
             };
 
-            catalogService.addOrUpdateTopologyTestRunHistory(anyLong, withInstanceOf(TopologyTestRunHistory.class));
+            catalogService.updateTopologyTestRunHistory(anyLong, withInstanceOf(TopologyTestRunHistory.class));
             result = new Delegate<TopologyTestRunHistory>() {
                 TopologyTestRunHistory delegate(Long id, TopologyTestRunHistory history) {
                     history.setId(id);

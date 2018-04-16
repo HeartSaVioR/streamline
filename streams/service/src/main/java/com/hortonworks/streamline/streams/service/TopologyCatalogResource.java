@@ -24,10 +24,6 @@ import com.hortonworks.streamline.common.exception.service.exception.server.Stre
 import com.hortonworks.streamline.common.util.WSUtils;
 import com.hortonworks.streamline.streams.actions.topology.service.TopologyActionsService;
 import com.hortonworks.streamline.streams.catalog.Topology;
-import com.hortonworks.streamline.streams.catalog.TopologyComponent;
-import com.hortonworks.streamline.streams.catalog.TopologyProcessor;
-import com.hortonworks.streamline.streams.catalog.TopologySink;
-import com.hortonworks.streamline.streams.catalog.TopologySource;
 import com.hortonworks.streamline.streams.catalog.TopologyVersion;
 import com.hortonworks.streamline.streams.catalog.service.StreamCatalogService;
 import com.hortonworks.streamline.streams.catalog.topology.TopologyData;
@@ -60,11 +56,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Optional;
 
 import static com.hortonworks.streamline.streams.catalog.Topology.NAMESPACE;
@@ -254,8 +248,8 @@ public class TopologyCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}")
     @Timed
-    public Response addOrUpdateTopology (@PathParam("topologyId") Long topologyId,
-                                         Topology topology, @Context SecurityContext securityContext) {
+    public Response updateTopology(@PathParam("topologyId") Long topologyId,
+                                   Topology topology, @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 NAMESPACE, topologyId, WRITE);
         if (StringUtils.isEmpty(topology.getName())) {
@@ -269,15 +263,16 @@ public class TopologyCatalogResource {
         }
 
         Topology existingTopology = catalogService.getTopology(topologyId);
-        Topology result = catalogService.addOrUpdateTopology(topologyId, topology);
+        if (existingTopology == null) {
+            throw EntityNotFoundException.byId(String.valueOf(topologyId));
+        }
 
-        if (existingTopology != null) {
-            Long prevNamespaceId = existingTopology.getNamespaceId();
-            if (!result.getNamespaceId().equals(prevNamespaceId)) {
-                LOG.info("Determined namespace change on topology: " + topologyId);
-                // environment has changed: it should set 'reconfigure' to all components
-                catalogService.setReconfigureOnAllComponentsInTopology(result);
-            }
+        Topology result = catalogService.updateTopology(topologyId, topology);
+        Long prevNamespaceId = existingTopology.getNamespaceId();
+        if (!result.getNamespaceId().equals(prevNamespaceId)) {
+            LOG.info("Determined namespace change on topology: " + topologyId);
+            // environment has changed: it should set 'reconfigure' to all components
+            catalogService.setReconfigureOnAllComponentsInTopology(result);
         }
         return WSUtils.respondEntity(result, OK);
     }
@@ -318,14 +313,14 @@ public class TopologyCatalogResource {
             if (versionInfo.getDescription() == null) {
                 versionInfo.setDescription("");
             }
-            TopologyVersion savedVersion = catalogService.addOrUpdateTopologyVersionInfo(
+            TopologyVersion savedVersion = catalogService.updateTopologyVersionInfo(
                     currentVersion.get().getId(), versionInfo);
             catalogService.cloneTopologyVersion(topologyId, savedVersion.getId());
             return WSUtils.respondEntity(savedVersion, CREATED);
         } catch (Exception ex) {
             // restore the current version
             if (currentVersion.isPresent()) {
-                catalogService.addOrUpdateTopologyVersionInfo(currentVersion.get().getId(), currentVersion.get());
+                catalogService.updateTopologyVersionInfo(currentVersion.get().getId(), currentVersion.get());
             }
             throw ex;
         }

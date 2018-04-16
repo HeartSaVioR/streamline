@@ -269,11 +269,11 @@ public class TopologyProcessorCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}/processors/{id}")
     @Timed
-    public Response addOrUpdateTopologyProcessor(@PathParam("topologyId") Long topologyId, @PathParam("id") Long processorId,
-                                                 TopologyProcessor topologyProcessor, @Context SecurityContext securityContext) {
+    public Response updateTopologyProcessor(@PathParam("topologyId") Long topologyId, @PathParam("id") Long processorId,
+                                            TopologyProcessor topologyProcessor, @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologyProcessor createdTopologyProcessor = catalogService.addOrUpdateTopologyProcessor(
+        TopologyProcessor createdTopologyProcessor = catalogService.updateTopologyProcessor(
                 topologyId, processorId, topologyProcessor);
         return WSUtils.respondEntity(createdTopologyProcessor, CREATED);
     }

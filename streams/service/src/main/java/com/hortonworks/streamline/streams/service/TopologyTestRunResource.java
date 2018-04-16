@@ -467,16 +467,16 @@ public class TopologyTestRunResource {
 
     @PUT
     @Path("/topologies/{topologyId}/testcases/{testCaseId}")
-    public Response addOrUpdateTestRunCase(@PathParam("topologyId") Long topologyId,
-                                           @PathParam("testCaseId") Long testCaseId,
-                                           TopologyTestRunCase testRunCase,
-                                           @Context SecurityContext securityContext) {
+    public Response updateTestRunCase(@PathParam("topologyId") Long topologyId,
+                                      @PathParam("testCaseId") Long testCaseId,
+                                      TopologyTestRunCase testRunCase,
+                                      @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_USER,
                 Topology.NAMESPACE, topologyId, WRITE);
 
         testRunCase.setTopologyId(topologyId);
         testRunCase.setId(testCaseId);
-        TopologyTestRunCase updatedCase = catalogService.addOrUpdateTopologyTestRunCase(topologyId, testRunCase);
+        TopologyTestRunCase updatedCase = catalogService.updateTopologyTestRunCase(topologyId, testRunCase);
         return WSUtils.respondEntity(updatedCase, OK);
     }
 
@@ -675,11 +675,11 @@ public class TopologyTestRunResource {
 
     @PUT
     @Path("/topologies/{topologyId}/testcases/{testCaseId}/sources/{id}")
-    public Response addOrUpdateTestRunCaseSource(@PathParam("topologyId") Long topologyId,
-                                           @PathParam("testCaseId") Long testCaseId,
-                                           @PathParam("id") Long id,
-                                           TopologyTestRunCaseSource testRunCaseSource,
-                                           @Context SecurityContext securityContext) {
+    public Response updateTestRunCaseSource(@PathParam("topologyId") Long topologyId,
+                                            @PathParam("testCaseId") Long testCaseId,
+                                            @PathParam("id") Long id,
+                                            TopologyTestRunCaseSource testRunCaseSource,
+                                            @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_USER,
                 Topology.NAMESPACE, topologyId, WRITE);
 
@@ -689,7 +689,7 @@ public class TopologyTestRunResource {
         TopologySource topologySource = getAssociatedTopologySource(topologyId, testCaseId, testRunCaseSource.getSourceId());
         testRunCaseSource.setVersionId(topologySource.getVersionId());
 
-        TopologyTestRunCaseSource updatedCase = catalogService.addOrUpdateTopologyTestRunCaseSource(testRunCaseSource.getId(), testRunCaseSource);
+        TopologyTestRunCaseSource updatedCase = catalogService.updateTopologyTestRunCaseSource(testRunCaseSource.getId(), testRunCaseSource);
         return WSUtils.respondEntity(updatedCase, OK);
     }
 
@@ -782,11 +782,11 @@ public class TopologyTestRunResource {
 
     @PUT
     @Path("/topologies/{topologyId}/testcases/{testCaseId}/sinks/{id}")
-    public Response addOrUpdateTestRunCaseSink(@PathParam("topologyId") Long topologyId,
-                                               @PathParam("testCaseId") Long testCaseId,
-                                               @PathParam("id") Long id,
-                                               TopologyTestRunCaseSink testRunCaseSink,
-                                               @Context SecurityContext securityContext) {
+    public Response updateTestRunCaseSink(@PathParam("topologyId") Long topologyId,
+                                          @PathParam("testCaseId") Long testCaseId,
+                                          @PathParam("id") Long id,
+                                          TopologyTestRunCaseSink testRunCaseSink,
+                                          @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_USER,
                 Topology.NAMESPACE, topologyId, WRITE);
 
@@ -796,7 +796,7 @@ public class TopologyTestRunResource {
         TopologySink topologySink = getAssociatedTopologySink(topologyId, testCaseId, testRunCaseSink.getSinkId());
         testRunCaseSink.setVersionId(topologySink.getVersionId());
 
-        TopologyTestRunCaseSink updatedCase = catalogService.addOrUpdateTopologyTestRunCaseSink(testRunCaseSink.getId(), testRunCaseSink);
+        TopologyTestRunCaseSink updatedCase = catalogService.updateTopologyTestRunCaseSink(testRunCaseSink.getId(), testRunCaseSink);
         return WSUtils.respondEntity(updatedCase, OK);
     }
 

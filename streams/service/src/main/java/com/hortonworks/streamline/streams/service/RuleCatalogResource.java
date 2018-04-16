@@ -266,11 +266,11 @@ public class RuleCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}/rules/{id}")
     @Timed
-    public Response addOrUpdateRule(@PathParam("topologyId") Long topologyId, @PathParam("id") Long ruleId,
-                                                 TopologyRule topologyRule, @Context SecurityContext securityContext) throws Exception {
+    public Response updateRule(@PathParam("topologyId") Long topologyId, @PathParam("id") Long ruleId,
+                               TopologyRule topologyRule, @Context SecurityContext securityContext) throws Exception {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologyRule createdTopologyRule = catalogService.addOrUpdateRule(topologyId, ruleId, topologyRule);
+        TopologyRule createdTopologyRule = catalogService.updateRule(topologyId, ruleId, topologyRule);
         return WSUtils.respondEntity(createdTopologyRule, CREATED);
     }
 

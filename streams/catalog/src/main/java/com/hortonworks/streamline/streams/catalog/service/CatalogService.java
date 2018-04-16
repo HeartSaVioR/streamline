@@ -98,15 +98,15 @@ public class CatalogService {
             file.setTimestamp(System.currentTimeMillis());
         }
         validateFileInfo(file);
-        dao.addOrUpdate(file);
+        dao.add(file);
         return file;
     }
 
-    public File addOrUpdateFile(Long fileId, File file) {
+    public File updateFile(Long fileId, File file) {
         file.setId(fileId);
         file.setTimestamp(System.currentTimeMillis());
         validateFileInfo(file);
-        this.dao.addOrUpdate(file);
+        this.dao.update(file);
         return file;
     }
 

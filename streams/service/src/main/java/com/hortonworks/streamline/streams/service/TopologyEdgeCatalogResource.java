@@ -259,11 +259,11 @@ public class TopologyEdgeCatalogResource {
     @PUT
     @Path("/topologies/{topologyId}/edges/{id}")
     @Timed
-    public Response addOrUpdateTopologyEdge(@PathParam("topologyId") Long topologyId, @PathParam("id") Long edgeId,
-                                            TopologyEdge edge, @Context SecurityContext securityContext) {
+    public Response updateTopologyEdge(@PathParam("topologyId") Long topologyId, @PathParam("id") Long edgeId,
+                                       TopologyEdge edge, @Context SecurityContext securityContext) {
         SecurityUtil.checkRoleOrPermissions(authorizer, securityContext, Roles.ROLE_TOPOLOGY_SUPER_ADMIN,
                 Topology.NAMESPACE, topologyId, WRITE);
-        TopologyEdge createdEdge = catalogService.addOrUpdateTopologyEdge(topologyId, edgeId, edge);
+        TopologyEdge createdEdge = catalogService.updateTopologyEdge(topologyId, edgeId, edge);
         return WSUtils.respondEntity(createdEdge, CREATED);
     }
 

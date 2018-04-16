@@ -146,7 +146,7 @@ public class NamespaceCatalogResourceTest {
             times = 0;
             environmentService.removeServiceClusterMapping(testNamespaceId, anyString, anyLong);
             times = existingMappings.size();
-            environmentService.addOrUpdateServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
+            environmentService.addServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
             times = existingMappings.size();
         }};
     }
@@ -256,7 +256,7 @@ public class NamespaceCatalogResourceTest {
         }
 
         new Verifications() {{
-            environmentService.addOrUpdateServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
+            environmentService.addServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
             times = 0;
         }};
     }
@@ -286,7 +286,7 @@ public class NamespaceCatalogResourceTest {
         }
 
         new Verifications() {{
-            environmentService.addOrUpdateServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
+            environmentService.addServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
             times = 0;
         }};
     }
@@ -312,8 +312,8 @@ public class NamespaceCatalogResourceTest {
         namespaceCatalogResource.mapServiceToClusterInNamespace(testNamespaceId, existingStreamingEngineMapping, securityContext);
 
         new Verifications() {{
-            environmentService.addOrUpdateServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
-            times = 1;
+            environmentService.addServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
+            times = 0;
         }};
     }
 
@@ -338,8 +338,8 @@ public class NamespaceCatalogResourceTest {
         namespaceCatalogResource.mapServiceToClusterInNamespace(testNamespaceId, existingTimeSeriesDBMapping, securityContext);
 
         new Verifications() {{
-            environmentService.addOrUpdateServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
-            times = 1;
+            environmentService.addServiceClusterMapping(withAny(new NamespaceServiceClusterMap()));
+            times = 0;
         }};
     }
 

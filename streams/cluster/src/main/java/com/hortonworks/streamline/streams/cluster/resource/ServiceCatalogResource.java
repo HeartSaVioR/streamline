@@ -158,8 +158,8 @@ public class ServiceCatalogResource {
     @PUT
     @Path("/clusters/{clusterId}/services/{id}")
     @Timed
-    public Response addOrUpdateService(@PathParam("clusterId") Long clusterId,
-        @PathParam("id") Long serviceId, Service service, @Context SecurityContext securityContext) {
+    public Response updateService(@PathParam("clusterId") Long clusterId,
+                                  @PathParam("id") Long serviceId, Service service, @Context SecurityContext securityContext) {
         SecurityUtil.checkPermissions(authorizer, securityContext, Cluster.NAMESPACE, clusterId, WRITE);
         // overwrite cluster id to given path param
         service.setClusterId(clusterId);
@@ -169,7 +169,7 @@ public class ServiceCatalogResource {
             throw EntityNotFoundException.byId("cluster: " + clusterId.toString());
         }
 
-        Service newService = environmentService.addOrUpdateService(serviceId, service);
+        Service newService = environmentService.updateService(serviceId, service);
         return WSUtils.respondEntity(newService, OK);
     }
 

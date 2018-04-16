@@ -235,9 +235,9 @@ public class TopologyComponentBundleResource {
     @PUT
     @Path("/componentbundles/{component}/{id}")
     @Timed
-    public Response addOrUpdateTopologyComponentBundleById (@PathParam("component") TopologyComponentBundle.TopologyComponentType componentType, @PathParam("id") Long id,
-                                                            FormDataMultiPart form,
-                                                            @Context SecurityContext securityContext) throws IOException, ComponentConfigException {
+    public Response updateTopologyComponentBundleById(@PathParam("component") TopologyComponentBundle.TopologyComponentType componentType, @PathParam("id") Long id,
+                                                      FormDataMultiPart form,
+                                                      @Context SecurityContext securityContext) throws IOException, ComponentConfigException {
         SecurityUtil.checkRole(authorizer, securityContext, Roles.ROLE_TOPOLOGY_COMPONENT_BUNDLE_ADMIN);
         InputStream bundleJar = null;
         File tmpFile = null;
@@ -259,7 +259,7 @@ public class TopologyComponentBundleResource {
             }
             validateTopologyBundle(topologyComponentBundle);
             topologyComponentBundle.setType(componentType);
-            TopologyComponentBundle updatedBundle = catalogService.addOrUpdateTopologyComponentBundle(id, topologyComponentBundle, tmpFile);
+            TopologyComponentBundle updatedBundle = catalogService.updateTopologyComponentBundle(id, topologyComponentBundle, tmpFile);
             return WSUtils.respondEntity(updatedBundle, OK);
         } catch (RuntimeException e) {
             LOG.debug("Error occured while updating topology component bundle", e);
@@ -284,9 +284,9 @@ public class TopologyComponentBundleResource {
     @PUT
     @Path("/componentbundles/{component}")
     @Timed
-    public Response addOrUpdateTopologyComponentBundle (@PathParam("component") TopologyComponentBundle.TopologyComponentType componentType,
-                                                        FormDataMultiPart form,
-                                                        @Context SecurityContext securityContext) throws IOException, ComponentConfigException {
+    public Response updateTopologyComponentBundle(@PathParam("component") TopologyComponentBundle.TopologyComponentType componentType,
+                                                  FormDataMultiPart form,
+                                                  @Context SecurityContext securityContext) throws IOException, ComponentConfigException {
         SecurityUtil.checkRole(authorizer, securityContext, Roles.ROLE_TOPOLOGY_COMPONENT_BUNDLE_ADMIN);
         InputStream bundleJar = null;
         File tmpFile = null;
@@ -318,7 +318,7 @@ public class TopologyComponentBundleResource {
             queryParams.add(new QueryParam(TopologyComponentBundle.SUB_TYPE, topologyComponentBundle.getSubType()));
             Collection<TopologyComponentBundle> existing = catalogService.listTopologyComponentBundlesForTypeWithFilter(componentType, queryParams);
             if (existing != null && existing.size() == 1) {
-                TopologyComponentBundle updatedBundle = catalogService.addOrUpdateTopologyComponentBundle(existing.iterator().next().getId(),
+                TopologyComponentBundle updatedBundle = catalogService.updateTopologyComponentBundle(existing.iterator().next().getId(),
                         topologyComponentBundle, tmpFile);
                 return WSUtils.respondEntity(updatedBundle, OK);
             } else {

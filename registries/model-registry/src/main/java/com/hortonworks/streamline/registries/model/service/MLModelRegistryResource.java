@@ -139,7 +139,7 @@ public final class MLModelRegistryResource {
     @Path("/ml/models/{id}")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Timed
-    public Response addOrUpdateModelInfo(
+    public Response updateModelInfo(
             @PathParam("id") final Long modelId,
             @FormDataParam("modelInfo") final MLModel modelInfo,
             @FormDataParam("pmmlFile") final InputStream pmmlInputStream,
@@ -149,7 +149,7 @@ public final class MLModelRegistryResource {
         }
 
         try {
-            MLModel createdModelInfo = modelRegistryService.addOrUpdateModelInfo(
+            MLModel createdModelInfo = modelRegistryService.updateModelInfo(
                     modelId, modelInfo, pmmlInputStream, fileDisposition.getFileName());
             return WSUtils.respondEntity(createdModelInfo, CREATED);
         } catch (Exception exception) {

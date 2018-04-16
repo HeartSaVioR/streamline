@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class TopologyContext implements TopologyActionContext {
     private static final Logger LOG = LoggerFactory.getLogger(TopologyContext.class);
@@ -101,12 +102,22 @@ public class TopologyContext implements TopologyActionContext {
 
     @Override
     public void setCurrentAction(String description) {
+        Optional<com.hortonworks.streamline.streams.catalog.topology.state.TopologyState> catalogStateOptional =
+                topologyActionsService.getCatalogService().getTopologyState(topology.getId());
+
         com.hortonworks.streamline.streams.catalog.topology.state.TopologyState catalogState =
-                new com.hortonworks.streamline.streams.catalog.topology.state.TopologyState();
+                catalogStateOptional.orElseGet(com.hortonworks.streamline.streams.catalog.topology.state.TopologyState::new);
+
         catalogState.setName(getStateName());
         catalogState.setTopologyId(topology.getId());
         catalogState.setDescription(description);
+
         LOG.debug("Topology id: {}, state: {}", topology.getId(), catalogState);
-        topologyActionsService.getCatalogService().addOrUpdateTopologyState(topology.getId(), catalogState);
+
+        if (catalogStateOptional.isPresent()) {
+            topologyActionsService.getCatalogService().updateTopologyState(topology.getId(), catalogState);
+        } else {
+            topologyActionsService.getCatalogService().addTopologyState(topology.getId(), catalogState);
+        }
     }
 }
